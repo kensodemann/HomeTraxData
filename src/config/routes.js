@@ -18,8 +18,4 @@ module.exports = function(app) {
     req.logout();
     res.end();
   });
-
-  app.all('/*', function(req, res) {
-    res.sendFile(config.rootPath + '/public/index.html');
-  });
 };
