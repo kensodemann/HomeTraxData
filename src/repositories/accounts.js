@@ -77,12 +77,12 @@ Accounts.prototype.postGetAction = function(accts, done) {
 var accounts = new Accounts();
 
 module.exports = function(app) {
-  app.get('/api/accounts', redirect.toHttps, authentication.requiresApiLogin,
+  app.get('/accounts', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {accounts.get(req, res);});
-  app.get('/api/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
+  app.get('/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {accounts.getOne(req, res);});
-  app.post('/api/accounts/:id?', redirect.toHttps, authentication.requiresApiLogin,
+  app.post('/accounts/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {accounts.save(req, res);});
-  app.delete('/api/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
+  app.delete('/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {accounts.remove(req, res);});
 };
