@@ -1,0 +1,59 @@
+{
+  "name": "Home-App",
+  "version": "1.0.0",
+  "description": "Track My Personal Information",
+  "keywords": [
+    "OpenShift",
+    "Node.js",
+    "application",
+    "openshift"
+  ],
+  "author": {
+    "name": "Ken Sodemann",
+    "email": "ken.sodemann@gmail.com",
+    "url": "http://www.openshift.com/"
+  },
+  "homepage": "http://www.openshift.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openshift/origin-server"
+  },
+  "engines": {
+    "node": ">= 0.10.0",
+    "npm": ">= 1.3.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.2.0",
+    "cookie-parser": "^1.1.0",
+    "express": "^4.3.0",
+    "express-session": "^1.2.0",
+    "jsonwebtoken": "^5.0.2",
+    "mongojs": "^0.13.0",
+    "morgan": "^1.1.1",
+    "passport": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "serve-static": "^1.1.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.4",
+    "mocha": "^2.0.1",
+    "proxyquire": "^1.0.0",
+    "q": "^1.1.2",
+    "sinon": "^1.10.0",
+    "supertest": "^0.12.1"
+  },
+  "bundleDependencies": [],
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "nodemon -w server -w server.js server.js",
+    "preupdate-webdriver": "npm install"
+  }
+}
