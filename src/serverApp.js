@@ -48,7 +48,7 @@ var ServerApp = function() {
     // Removed 'SIGPIPE' from the list - bugz 852598.
     ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
       'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
-    ].forEach(function(element, index, array) {
+    ].forEach(function(element) {
       process.on(element, function() {
         self.terminator(element);
       });
@@ -62,7 +62,7 @@ var ServerApp = function() {
   self.initializeServer = function() {
     self.app = express();
 
-    require('./config/express')(self.app, config);
+    require('./config/express')(self.app);
     require('./config/routes')(self.app);
   };
 
