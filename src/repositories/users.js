@@ -200,12 +200,12 @@ function updateUserPassword(id, passwordData, res) {
 }
 
 module.exports = function(app){
-  app.get('/api/users', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {get(req, res);});
-  app.get('/api/users/:id', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {getById(req, res);});
-  app.post('/api/users', authentication.requiresRole('admin'), function(req, res) {add(req, res);});
-  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+  app.get('/users', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {get(req, res);});
+  app.get('/users/:id', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {getById(req, res);});
+  app.post('/users', authentication.requiresRole('admin'), function(req, res) {add(req, res);});
+  app.put('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {update(req, res);});
 
-  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+  app.put('/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {changePassword(req, res);});
 };

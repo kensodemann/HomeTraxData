@@ -8,7 +8,7 @@ var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 
-describe('api/users Routes', function() {
+describe('users Routes', function() {
   var app;
 
   beforeEach(function() {
@@ -80,7 +80,7 @@ describe('api/users Routes', function() {
 
     it('Requires Admin User', function(done) {
       request(app)
-        .get('/api/users')
+        .get('/users')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(requiresApiLoginCalled).to.be.true;
@@ -90,7 +90,7 @@ describe('api/users Routes', function() {
 
     it('Returns User Data', function(done) {
       request(app)
-        .get('/api/users')
+        .get('/users')
         .expect(200)
         .end(function(err, res) {
           expect(res.body.length).to.equal(3);
@@ -100,7 +100,7 @@ describe('api/users Routes', function() {
 
     it('Strips the salt and hashedPassword', function(done) {
       request(app)
-        .get('/api/users')
+        .get('/users')
         .expect(200)
         .end(function(err, res) {
           var data = res.body;
@@ -116,7 +116,7 @@ describe('api/users Routes', function() {
     describe('by Id', function() {
       it('Requires Admin or Current User', function(done) {
         request(app)
-          .get('/api/users/123456789012345678901234')
+          .get('/users/123456789012345678901234')
           .end(function() {
             expect(requiresApiLoginCalled).to.be.true;
             done();
@@ -128,7 +128,7 @@ describe('api/users Routes', function() {
           firstName: 'Lisa'
         }, function(err, user) {
           request(app)
-            .get('/api/users/' + user._id.toString())
+            .get('/users/' + user._id.toString())
             .end(function(err, res) {
               expect(res.status).to.equal(200);
               expect(res.body.lastName).to.equal('Buerger');
@@ -191,7 +191,7 @@ describe('api/users Routes', function() {
 
     it('Requires admin user', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
@@ -207,7 +207,7 @@ describe('api/users Routes', function() {
 
     it('Does not allow multiple users with the same username', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
@@ -223,7 +223,7 @@ describe('api/users Routes', function() {
 
     it('Does not allow username to be empty', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
@@ -239,7 +239,7 @@ describe('api/users Routes', function() {
 
     it('Does not allow firstName to be empty', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: '',
           lastName: 'Flintstone',
@@ -255,7 +255,7 @@ describe('api/users Routes', function() {
 
     it('Does not allow lastName to be empty', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: '',
@@ -271,7 +271,7 @@ describe('api/users Routes', function() {
 
     it('Does not allow password to be empty', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
@@ -287,7 +287,7 @@ describe('api/users Routes', function() {
 
     it('Does not allow password to be too short', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
@@ -303,7 +303,7 @@ describe('api/users Routes', function() {
 
     it('Saves a new user if valid', function(done) {
       request(app)
-        .post('/api/users')
+        .post('/users')
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
@@ -386,7 +386,7 @@ describe('api/users Routes', function() {
 
     it('Requires admin or matching current user', function(done) {
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -398,7 +398,7 @@ describe('api/users Routes', function() {
     it('Does not allow multiple users with the same username', function(done) {
       testUser.username = 'llb@email.com';
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -410,7 +410,7 @@ describe('api/users Routes', function() {
     it('Does not allow username to be empty', function(done) {
       testUser.username = '';
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -422,7 +422,7 @@ describe('api/users Routes', function() {
     it('Does not allow firstName to be empty', function(done) {
       testUser.firstName = '';
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -434,7 +434,7 @@ describe('api/users Routes', function() {
     it('Does not allow lastName to be empty', function(done) {
       testUser.lastName = '';
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -450,7 +450,7 @@ describe('api/users Routes', function() {
       testUser.colors = ["#ffeedc"];
       testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -477,7 +477,7 @@ describe('api/users Routes', function() {
       testUser.colors = ["#111111", "#222222", "#333333"];
       testUser.password = 'SomethingElse';
       request(app)
-        .put('/api/users/' + testUser._id)
+        .put('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);

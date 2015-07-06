@@ -9,7 +9,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('api/accounts Routes', function() {
+describe('accounts Routes', function() {
   var app;
 
   var myCar;

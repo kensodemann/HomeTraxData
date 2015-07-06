@@ -81,7 +81,7 @@ describe('api/changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/api/changepassword/' + testUser._id)
+        .put('/changepassword/' + testUser._id)
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -95,7 +95,7 @@ describe('api/changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/api/changepassword/123456789009876543211234')
+        .put('/changepassword/123456789009876543211234')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(404);
@@ -108,7 +108,7 @@ describe('api/changepassword Route', function() {
       passwordData.password = 'SomethingBogus';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/api/changepassword/' + testUser._id)
+        .put('/changepassword/' + testUser._id)
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(403);
@@ -122,7 +122,7 @@ describe('api/changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'Short';
       request(app)
-        .put('/api/changepassword/' + testUser._id)
+        .put('/changepassword/' + testUser._id)
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -136,7 +136,7 @@ describe('api/changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/api/changepassword/' + testUser._id)
+        .put('/changepassword/' + testUser._id)
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -154,7 +154,7 @@ describe('api/changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/api/changepassword/' + testUser._id)
+        .put('/changepassword/' + testUser._id)
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
