@@ -9,5 +9,5 @@ function get(req, res) {
 }
 
 module.exports = function(app) {
-  app.get('/api/currentUser', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {get(req, res);});
+  app.get('/currentUser', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {get(req, res);});
 };

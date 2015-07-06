@@ -8,7 +8,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var ObjectId = require("mongojs").ObjectId;
 
-describe('api/events Routes', function() {
+describe('events Routes', function() {
   var app;
   var myPublicEvent;
   var myPrivateEvent;
@@ -51,7 +51,7 @@ describe('api/events Routes', function() {
   describe('GET', function() {
     it('requires an API login', function(done) {
       request(app)
-        .get('/api/events')
+        .get('/events')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -60,7 +60,7 @@ describe('api/events Routes', function() {
 
     it('returns events for logged in user and non-private events for other users', function(done) {
       request(app)
-        .get('/api/events')
+        .get('/events')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(19);
@@ -75,7 +75,7 @@ describe('api/events Routes', function() {
 
     it('can be limited by event type', function(done) {
       request(app)
-        .get('/api/events?eventType=miscellaneous')
+        .get('/events?eventType=miscellaneous')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(3);
@@ -92,7 +92,7 @@ describe('api/events Routes', function() {
   describe('POST', function() {
     it('requires an API login', function(done) {
       request(app)
-        .post('/api/events')
+        .post('/events')
         .send({
           title: 'this is a title'
         })
@@ -104,7 +104,7 @@ describe('api/events Routes', function() {
 
     it('Saves new events', function(done) {
       request(app)
-        .post('/api/events')
+        .post('/events')
         .send({
           title: 'This is a new one',
           allDay: true,
@@ -124,7 +124,7 @@ describe('api/events Routes', function() {
 
     it('Sets userId to logged in user when saving new data', function(done) {
       request(app)
-        .post('/api/events')
+        .post('/events')
         .send({
           title: 'This is a new one',
           allDay: true,
@@ -144,7 +144,7 @@ describe('api/events Routes', function() {
 
     it('returns the _id when saving new data', function(done) {
       request(app)
-        .post('/api/events')
+        .post('/events')
         .send({
           title: 'This is a new one',
           allDay: true,
@@ -162,7 +162,7 @@ describe('api/events Routes', function() {
 
     it('strips fields starting with _ except _id ', function(done) {
       request(app)
-        .post('/api/events')
+        .post('/events')
         .send({
           title: 'This is a new one',
           allDay: true,
@@ -186,7 +186,7 @@ describe('api/events Routes', function() {
 
     it('Saves changes to existing items', function(done) {
       request(app)
-        .post('/api/events/' + myPublicEvent._id.toString())
+        .post('/events/' + myPublicEvent._id.toString())
         .send({
           title: 'Do Something Else',
           allDay: false,
@@ -210,7 +210,7 @@ describe('api/events Routes', function() {
 
     it("does not allow modifications to non existent events", function(done) {
       request(app)
-        .post('/api/events/53a4dd887c6dc30000bee3af')
+        .post('/events/53a4dd887c6dc30000bee3af')
         .send({
           title: 'Do Something Else',
           allDay: false,
@@ -233,7 +233,7 @@ describe('api/events Routes', function() {
     describe('saving transaction type events', function(){
       it('does not allow saving an event without a description', function(done) {
         request(app)
-          .post('/api/events')
+          .post('/events')
           .send({
             description: '',
             transactionDate: '2014-06-20T13:00:00',
@@ -250,7 +250,7 @@ describe('api/events Routes', function() {
 
       it('does not allow saving an event without a transaction date', function(done) {
         request(app)
-          .post('/api/events')
+          .post('/events')
           .send({
             description: 'something',
             transactionDate: '',
@@ -269,7 +269,7 @@ describe('api/events Routes', function() {
     describe('saving miscellaneous type events', function() {
       it("Does not allow modifications to other user's events", function(done) {
         request(app)
-          .post('/api/events/' + otherUserPublicEvent._id.toString())
+          .post('/events/' + otherUserPublicEvent._id.toString())
           .send({
             title: 'Do Something Else',
             allDay: false,
@@ -294,7 +294,7 @@ describe('api/events Routes', function() {
 
       it('does not allow the start date to be greater than the end date', function(done) {
         request(app)
-          .post('/api/events/' + myPublicEvent._id.toString())
+          .post('/events/' + myPublicEvent._id.toString())
           .send({
             title: 'Do Something Else',
             allDay: false,
@@ -314,7 +314,7 @@ describe('api/events Routes', function() {
 
       it('does not allow the start date to be greater than the end date', function(done) {
         request(app)
-          .post('/api/events')
+          .post('/events')
           .send({
             title: '',
             allDay: false,
@@ -333,7 +333,7 @@ describe('api/events Routes', function() {
 
       it('does not allow saving an event without a start date', function(done) {
         request(app)
-          .post('/api/events')
+          .post('/events')
           .send({
             title: 'Do Something Else',
             allDay: false,
@@ -352,7 +352,7 @@ describe('api/events Routes', function() {
 
       it('does not allow saving an event without a category', function(done) {
         request(app)
-          .post('/api/events')
+          .post('/events')
           .send({
             title: 'Do Something Else',
             allDay: false,
@@ -374,7 +374,7 @@ describe('api/events Routes', function() {
   describe('DELETE', function() {
     it('requires an API login', function(done) {
       request(app)
-        .delete('/api/events/123456789012345678901234')
+        .delete('/events/123456789012345678901234')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -383,7 +383,7 @@ describe('api/events Routes', function() {
 
     it('removes the specified item', function(done) {
       request(app)
-        .delete('/api/events/' + myPrivateEvent._id.toString())
+        .delete('/events/' + myPrivateEvent._id.toString())
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           db.events.find(function(err, evts) {
@@ -398,7 +398,7 @@ describe('api/events Routes', function() {
 
     it('retuns 404 if item does not exist', function(done) {
       request(app)
-        .delete('/api/events/53a4dd887c6dc30000bee3af')
+        .delete('/events/53a4dd887c6dc30000bee3af')
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           db.events.find(function(err, evts) {
@@ -411,7 +411,7 @@ describe('api/events Routes', function() {
     describe('deleting miscellaneous events', function() {
       it('returns 403 if item belongs to someone else', function(done) {
         request(app)
-          .delete('/api/events/' + otherUserPublicEvent._id.toString())
+          .delete('/events/' + otherUserPublicEvent._id.toString())
           .end(function(err, res) {
             expect(res.status).to.equal(403);
             db.events.find(function(err, evts) {

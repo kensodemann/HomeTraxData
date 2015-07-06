@@ -9,7 +9,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('api/accounts Routes', function() {
+describe('accounts Routes', function() {
   var app;
 
   var myCar;
@@ -52,7 +52,7 @@ describe('api/accounts Routes', function() {
   describe('GET Collection', function() {
     it('requires an API login', function(done) {
       request(app)
-        .get('/api/accounts')
+        .get('/accounts')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -61,7 +61,7 @@ describe('api/accounts Routes', function() {
 
     it('returns all of the accounts', function(done) {
       request(app)
-        .get('/api/accounts')
+        .get('/accounts')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(5);
@@ -72,7 +72,7 @@ describe('api/accounts Routes', function() {
     describe('liability accounts', function() {
       it('include sums and counts', function(done) {
         request(app)
-          .get('/api/accounts')
+          .get('/accounts')
           .end(function(err, res) {
             var accounts = res.body;
             var acct = findAccount(accounts, mySecondMortgage);
@@ -85,7 +85,7 @@ describe('api/accounts Routes', function() {
 
       it('subtracts payments from the amount to get the balance', function(done) {
         request(app)
-          .get('/api/accounts')
+          .get('/accounts')
           .end(function(err, res) {
             var accounts = res.body;
             var acct = findAccount(accounts, mySecondMortgage);
@@ -99,7 +99,7 @@ describe('api/accounts Routes', function() {
     describe('asset accounts', function() {
       it('includes sums and counts for asset auth', function(done) {
         request(app)
-          .get('/api/accounts')
+          .get('/accounts')
           .end(function(err, res) {
             var accounts = res.body;
             var acct = findAccount(accounts, myChecking);
@@ -112,7 +112,7 @@ describe('api/accounts Routes', function() {
 
       it('adds net to the amount to get the balance', function(done) {
         request(app)
-          .get('/api/accounts')
+          .get('/accounts')
           .end(function(err, res) {
             var accounts = res.body;
             var acct = findAccount(accounts, myChecking);
@@ -132,7 +132,7 @@ describe('api/accounts Routes', function() {
   describe('GET Single', function() {
     it('requires an API login', function(done) {
       request(app)
-        .get('/api/accounts/' + myCarLoan._id.toString())
+        .get('/accounts/' + myCarLoan._id.toString())
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -141,7 +141,7 @@ describe('api/accounts Routes', function() {
 
     it('returns the specified auth', function(done) {
       request(app)
-        .get('/api/accounts/' + myCarLoan._id.toString())
+        .get('/accounts/' + myCarLoan._id.toString())
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           myCarLoan._id = myCarLoan._id.toString();
@@ -153,7 +153,7 @@ describe('api/accounts Routes', function() {
 
     it('returns a 404 status if the auth does not exist', function(done) {
       request(app)
-        .get('/api/accounts/' + myCar._id.toString())
+        .get('/accounts/' + myCar._id.toString())
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           done();
@@ -164,7 +164,7 @@ describe('api/accounts Routes', function() {
   describe('POST', function() {
     it('requires an API login', function(done) {
       request(app)
-        .post('/api/accounts')
+        .post('/accounts')
         .send({
           name: 'Another Car Loan',
           bank: 'Car Chase Bank',
@@ -182,7 +182,7 @@ describe('api/accounts Routes', function() {
 
     it('saves new accounts', function(done) {
       request(app)
-        .post('/api/accounts')
+        .post('/accounts')
         .send({
           name: 'Another Car Loan',
           bank: 'Car Chase Bank',
@@ -204,7 +204,7 @@ describe('api/accounts Routes', function() {
 
     it('does not add new accounts when updating existing accounts', function(done) {
       request(app)
-        .post('/api/accounts/' + myCarLoan._id)
+        .post('/accounts/' + myCarLoan._id)
         .send({
           name: 'Another Car Loan',
           bank: 'Car Chase Bank',
@@ -226,7 +226,7 @@ describe('api/accounts Routes', function() {
 
     it('updates the specified household', function(done) {
       request(app)
-        .post('/api/accounts/' + myCarLoan._id)
+        .post('/accounts/' + myCarLoan._id)
         .send({
           name: 'Another Car Loan',
           bank: 'Car Chase Bank',
@@ -252,7 +252,7 @@ describe('api/accounts Routes', function() {
 
     it('returns 404 if the auth does not exist', function(done) {
       request(app)
-        .post('/api/accounts/54133902bc88a8241ac17f9d')
+        .post('/accounts/54133902bc88a8241ac17f9d')
         .send({
           name: 'Another Car Loan',
           bank: 'Car Chase Bank',
@@ -272,7 +272,7 @@ describe('api/accounts Routes', function() {
   describe('DELETE', function() {
     it('requires an API login', function(done) {
       request(app)
-        .delete('/api/accounts/' + mySecondMortgage._id.toString())
+        .delete('/accounts/' + mySecondMortgage._id.toString())
         .send()
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
@@ -282,7 +282,7 @@ describe('api/accounts Routes', function() {
 
     it('removes the specified auth', function(done) {
       request(app)
-        .delete('/api/accounts/' + mySecondMortgage._id.toString())
+        .delete('/accounts/' + mySecondMortgage._id.toString())
         .send()
         .end(function() {
           db.accounts.find(function(err, a) {
@@ -297,7 +297,7 @@ describe('api/accounts Routes', function() {
 
     it('removes events associated with specified auth', function(done) {
       request(app)
-        .delete('/api/accounts/' + mySecondMortgage._id.toString())
+        .delete('/accounts/' + mySecondMortgage._id.toString())
         .send()
         .end(function() {
           db.events.find(function(err, evts) {
@@ -313,7 +313,7 @@ describe('api/accounts Routes', function() {
 
     it('returns a status of 404 if the specified auth does not exist', function(done) {
       request(app)
-        .delete('/api/accounts/55293bd4b4b789415aa33dcf')
+        .delete('/accounts/55293bd4b4b789415aa33dcf')
         .send()
         .end(function(err, res) {
           expect(res.status).to.equal(404);

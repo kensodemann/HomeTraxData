@@ -118,10 +118,10 @@ function validateMiscellaneousEvent(req, done) {
 var repository = new Events();
 
 module.exports = function(app) {
-  app.get('/api/events', redirect.toHttps, authentication.requiresApiLogin,
+  app.get('/events', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {repository.get(req, res);});
-  app.post('/api/events/:id?', redirect.toHttps, authentication.requiresApiLogin,
+  app.post('/events/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {repository.save(req, res);});
-  app.delete('/api/events/:id', redirect.toHttps, authentication.requiresApiLogin,
+  app.delete('/events/:id', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {repository.remove(req, res);});
 };

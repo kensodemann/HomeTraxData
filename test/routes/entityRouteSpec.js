@@ -8,7 +8,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('api/entities routes', function() {
+describe('entities routes', function() {
   var app;
   var authStub = {
     requiresApiLogin: function(req, res, next) {
@@ -43,7 +43,7 @@ describe('api/entities routes', function() {
   describe('GET', function() {
     it('requires an API login', function(done) {
       request(app)
-        .get('/api/entities')
+        .get('/entities')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -52,7 +52,7 @@ describe('api/entities routes', function() {
 
     it('returns all of the entities', function(done) {
       request(app)
-        .get('/api/entities')
+        .get('/entities')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(6);
@@ -62,7 +62,7 @@ describe('api/entities routes', function() {
 
     it('returns just the specified entities', function(done) {
       request(app)
-        .get('/api/entities?entityType=household')
+        .get('/entities?entityType=household')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(3);
@@ -74,7 +74,7 @@ describe('api/entities routes', function() {
   describe('POST', function() {
     it('requires an API login call', function(done) {
       request(app)
-        .post('/api/entities')
+        .post('/entities')
         .send({
           name: 'Some Entity',
           entityType: 'somethingIMadeUp'
@@ -87,7 +87,7 @@ describe('api/entities routes', function() {
 
     it('saves new entities', function(done) {
       request(app)
-        .post('/api/entities')
+        .post('/entities')
         .send({
           name: 'VW Bug',
           year: 1960,
@@ -106,7 +106,7 @@ describe('api/entities routes', function() {
 
     it('does not add entities when updating and existing one', function(done) {
       request(app)
-        .post('/api/entities/' + myFavoriteEntity._id)
+        .post('/entities/' + myFavoriteEntity._id)
         .send({
           name: 'vW Bug',
           year: 1960,
@@ -125,7 +125,7 @@ describe('api/entities routes', function() {
 
     it('updates the specified entity', function(done) {
       request(app)
-        .post('/api/entities/' + myFavoriteEntity._id)
+        .post('/entities/' + myFavoriteEntity._id)
         .send({
           name: 'VW Bug',
           year: 1960,
@@ -147,7 +147,7 @@ describe('api/entities routes', function() {
 
     it('returns a 404 error status if the entity does not exist', function(done) {
       request(app)
-        .post('/api/entities/54133902bc88a8241ac17f9d')
+        .post('/entities/54133902bc88a8241ac17f9d')
         .send({
           name: 'vW Bug',
           year: 1960,
@@ -179,7 +179,7 @@ describe('api/entities routes', function() {
       it('requires a name', function(done) {
         entity.name = undefined;
         request(app)
-          .post('/api/entities')
+          .post('/entities')
           .send(entity)
           .end(function(err, res) {
             expect(res.status).to.equal(400);
@@ -191,7 +191,7 @@ describe('api/entities routes', function() {
       it('requires an address (line 1)', function(done) {
         entity.addressLine1 = undefined;
         request(app)
-          .post('/api/entities')
+          .post('/entities')
           .send(entity)
           .end(function(err, res) {
             expect(res.status).to.equal(400);
@@ -203,7 +203,7 @@ describe('api/entities routes', function() {
       it('requires city', function(done) {
         entity.city = undefined;
         request(app)
-          .post('/api/entities')
+          .post('/entities')
           .send(entity)
           .end(function(err, res) {
             expect(res.status).to.equal(400);
@@ -215,7 +215,7 @@ describe('api/entities routes', function() {
       it('requires state', function(done) {
         entity.state = undefined;
         request(app)
-          .post('/api/entities')
+          .post('/entities')
           .send(entity)
           .end(function(err, res) {
             expect(res.status).to.equal(400);
@@ -227,7 +227,7 @@ describe('api/entities routes', function() {
       it('requires postal code', function(done) {
         entity.postal = undefined;
         request(app)
-          .post('/api/entities')
+          .post('/entities')
           .send(entity)
           .end(function(err, res) {
             expect(res.status).to.equal(400);
