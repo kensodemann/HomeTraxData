@@ -9,7 +9,7 @@ var proxyquire = require('proxyquire');
 var request = require('supertest');
 var sinon = require('sinon');
 
-describe('api/currentUser', function() {
+describe('currentUser', function() {
   var app;
   var testUser;
 
@@ -46,7 +46,7 @@ describe('api/currentUser', function() {
 
     it('requires API login', function(done) {
       request(app)
-        .get('/api/currentUser')
+        .get('/currentUser')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -57,7 +57,7 @@ describe('api/currentUser', function() {
       var expectedValue = _.extend({}, testUser);
       expectedValue._id = expectedValue._id.toString();
       request(app)
-        .get('/api/currentUser')
+        .get('/currentUser')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body).to.deep.equal(expectedValue);
