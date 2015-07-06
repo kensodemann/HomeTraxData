@@ -51,11 +51,11 @@ function validateHousehold(req, done) {
 var repository = new Entities();
 
 module.exports = function(app) {
-  app.get('/api/entities', redirect.toHttps, authentication.requiresApiLogin,
+  app.get('/entities', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {
       repository.get(req, res);
     });
-  app.post('/api/entities/:id?', redirect.toHttps, authentication.requiresApiLogin,
+  app.post('/entities/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {
       repository.save(req, res);
     });
