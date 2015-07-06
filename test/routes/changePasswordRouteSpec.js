@@ -9,7 +9,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var encryption = require('../../src/services/encryption');
 
-describe('api/changepassword Route', function() {
+describe('changepassword Route', function() {
   var app;
 
   beforeEach(function() {

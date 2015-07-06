@@ -15,5 +15,5 @@ function get(req, res) {
 }
 
 module.exports = function(app){
-  app.get('/api/versions', redirect.toHttps, function(req, res) {get(req, res);});
+  app.get('/versions', redirect.toHttps, function(req, res) {get(req, res);});
 };

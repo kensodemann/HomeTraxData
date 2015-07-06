@@ -143,7 +143,7 @@ describe('users Routes', function() {
       it('Returns 404 if specified user does not exist', function(done) {
         db.users.remove({}, function() {
           request(app)
-            .get('/api/users/123456789012345678901234')
+            .get('/users/123456789012345678901234')
             .end(function(err, res) {
               expect(res.status).to.equal(404);
               done();
