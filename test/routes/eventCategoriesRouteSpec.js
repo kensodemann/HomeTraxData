@@ -7,7 +7,7 @@ var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 
-describe('api/eventCategories Routes', function() {
+describe('eventCategories Routes', function() {
   var app;
   var myFavoriteCategory;
   var authStub = {
@@ -42,7 +42,7 @@ describe('api/eventCategories Routes', function() {
   describe('GET', function() {
     it('requires an API login', function(done) {
       request(app)
-        .get('/api/eventCategories')
+        .get('/eventCategories')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
@@ -51,7 +51,7 @@ describe('api/eventCategories Routes', function() {
 
     it('returns event categories', function(done) {
       request(app)
-        .get('/api/eventCategories')
+        .get('/eventCategories')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(4);
@@ -63,7 +63,7 @@ describe('api/eventCategories Routes', function() {
   describe('POST', function() {
     it('requires an API login', function(done) {
       request(app)
-        .post('/api/eventCategories')
+        .post('/eventCategories')
         .send({
           name: 'this is a name'
         })
@@ -75,7 +75,7 @@ describe('api/eventCategories Routes', function() {
 
     it('saves the event category', function(done) {
       request(app)
-        .post('/api/eventCategories')
+        .post('/eventCategories')
         .send({
           name: 'this is a name'
         })
@@ -91,7 +91,7 @@ describe('api/eventCategories Routes', function() {
 
     it('saves specified event category', function(done) {
       request(app)
-        .post('/api/eventCategories/' + myFavoriteCategory._id.toString())
+        .post('/eventCategories/' + myFavoriteCategory._id.toString())
         .send({
           _id: 1,
           name: 'this is a name'
