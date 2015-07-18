@@ -1,0 +1,11 @@
+node_modules
+
+.idea/*
+!.idea/codeStyleSettings.xml
+
+.c9/
+data/
+!server/data/
+*.log
+
+.DS_Store
