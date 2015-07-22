@@ -76,20 +76,10 @@ describe('accounts Routes', function() {
           .end(function(err, res) {
             var accounts = res.body;
             var acct = findAccount(accounts, mySecondMortgage);
+            expect(acct.disbursements).to.be.closeTo(-30495.78, 0.001);
             expect(acct.principalPaid).to.be.closeTo(397.9, 0.001);
             expect(acct.interestPaid).to.be.closeTo(203.1, 0.001);
-            expect(acct.numberOfTransactions).to.equal(2);
-            done();
-          });
-      });
-
-      it('subtracts payments from the amount to get the balance', function(done) {
-        request(app)
-          .get('/accounts')
-          .end(function(err, res) {
-            var accounts = res.body;
-            var acct = findAccount(accounts, mySecondMortgage);
-            expect(acct.balance).to.be.closeTo(acct.amount - 397.9, 0.001);
+            expect(acct.numberOfTransactions).to.equal(3);
             done();
           });
       });
@@ -103,20 +93,9 @@ describe('accounts Routes', function() {
           .end(function(err, res) {
             var accounts = res.body;
             var acct = findAccount(accounts, myChecking);
-            expect(acct.principalPaid).to.be.closeTo(345.36, 0.001);
+            expect(acct.principalPaid).to.be.closeTo(1345.36, 0.001);
             expect(acct.interestPaid).to.be.closeTo(0.09, 0.001);
-            expect(acct.numberOfTransactions).to.equal(6);
-            done();
-          });
-      });
-
-      it('adds net to the amount to get the balance', function(done) {
-        request(app)
-          .get('/accounts')
-          .end(function(err, res) {
-            var accounts = res.body;
-            var acct = findAccount(accounts, myChecking);
-            expect(acct.balance).to.be.closeTo(acct.amount + 345.36, 0.001);
+            expect(acct.numberOfTransactions).to.equal(7);
             done();
           });
       });
@@ -211,7 +190,6 @@ describe('accounts Routes', function() {
           accountNumber: '132499503-43',
           accountType: 'loan',
           balanceType: 'liability',
-          amount: 5049.83,
           entityRid: myCar._id
         })
         .end(function(err, res) {
@@ -233,7 +211,6 @@ describe('accounts Routes', function() {
           accountNumber: '132499503-43',
           accountType: 'loan',
           balanceType: 'liability',
-          amount: 5049.83,
           entityRid: myCar._id
         })
         .end(function() {
@@ -244,7 +221,6 @@ describe('accounts Routes', function() {
             expect(a.bank).to.equal('Car Chase Bank');
             expect(a.accountNumber).to.equal('132499503-43');
             expect(a.entityRid).to.deep.equal(myCar._id);
-            expect(a.amount).to.equal(5049.83);
             done();
           });
         });
@@ -259,7 +235,6 @@ describe('accounts Routes', function() {
           accountNumber: '132499503-43',
           accountType: 'loan',
           balanceType: 'liability',
-          amount: 5049.83,
           entityRid: myCar._id
         })
         .end(function(err, res) {
@@ -301,7 +276,7 @@ describe('accounts Routes', function() {
         .send()
         .end(function() {
           db.events.find(function(err, evts) {
-            expect(evts.length).to.equal(13);
+            expect(evts.length).to.equal(16);
             evts.forEach(function(item) {
               expect(item.accountRid).to.not.deep.equal(mySecondMortgage._id);
             });
@@ -361,8 +336,7 @@ describe('accounts Routes', function() {
       bank: 'Middle Town Savings',
       accountNumber: '99948594-091',
       accountType: 'savings',
-      balanceType: 'asset',
-      amount: 1000.00
+      balanceType: 'asset'
     }, function(err, a) {
       mySavings = a;
       db.accounts.save({
@@ -370,8 +344,7 @@ describe('accounts Routes', function() {
         bank: 'South Central Park Bank',
         accountNumber: '3994050-395',
         accountType: 'checking',
-        balanceType: 'asset',
-        amount: 4234.79
+        balanceType: 'asset'
       }, function(err, a) {
         myChecking = a;
         db.accounts.save({
@@ -380,7 +353,6 @@ describe('accounts Routes', function() {
           accountNumber: '1399405-2093',
           accountType: 'loan',
           balanceType: 'liability',
-          amount: 176940.43,
           entityRid: myHouse._id
         }, function(err, a) {
           myFirstMortgage = a;
@@ -390,7 +362,6 @@ describe('accounts Routes', function() {
             accountNumber: '38984905-39',
             accountType: 'loan',
             balanceType: 'liability',
-            amount: 30495.78,
             entityRid: myHouse._id
           }, function(err, a) {
             mySecondMortgage = a;
@@ -414,45 +385,68 @@ describe('accounts Routes', function() {
 
   function loadEvents(done) {
     db.events.insert([{
+      description: '1st Mortgage, Initial Balance',
+      principalAmount: -176940.43,
+      eventType: 'transaction',
+      transactionType:'disbursement',
+      accountRid: myFirstMortgage._id
+    },{
       description: '1st Mortgage, Payment #1',
       principalAmount: 943.93,
       interestAmount: 394.82,
       eventType: 'transaction',
+      transactionType:'payment',
       accountRid: myFirstMortgage._id
     }, {
       description: '1st Mortgage, Payment #2',
       principalAmount: 944.90,
       interestAmount: 393.95,
       eventType: 'transaction',
+      transactionType:'payment',
       accountRid: myFirstMortgage._id
     }, {
       name: '1st Mortgage, Payment #3',
       principalAmount: 945.62,
       interestAmount: 393.13,
       eventType: 'transaction',
+      transactionType:'payment',
       accountRid: myFirstMortgage._id
+    }, {
+      name: '2nd Mortgage, Opening Balance',
+      principalAmount: -30495.78,
+      eventType: 'transaction',
+      transactionType:'disbursement',
+      accountRid: mySecondMortgage._id
     }, {
       name: '2nd Mortgage, Payment #1',
       principalAmount: 199.25,
       interestAmount: 101.25,
       eventType: 'transaction',
+      transactionType:'payment',
       accountRid: mySecondMortgage._id
     }, {
       name: '2nd Mortgage, Payment #2',
       principalAmount: 198.65,
       interestAmount: 101.85,
       eventType: 'transaction',
+      transactionType:'payment',
       accountRid: mySecondMortgage._id
     }, {
       description: '2nd Mortgage, non-Trans #A',
       principalAmount: 199.25,
       interestAmount: 101.25,
       eventType: 'NotATransaction',
+      transactionType:'payment',
       accountRid: mySecondMortgage._id
     }, {
-      description: 'Savings Monthly Deposit #1',
+      description: 'Savings Opening Balance',
       principalAmount: 1000.00,
       interestAmount: 0.12,
+      eventType: 'transaction',
+      accountRid: mySavings._id
+    }, {
+      description: 'Savings Monthly Deposit #1',
+      principalAmount: 4234.79,
       eventType: 'transaction',
       accountRid: mySavings._id
     }, {
@@ -468,6 +462,11 @@ describe('accounts Routes', function() {
       description: 'This is some other sort of event',
       eventType: 'SomethingElse',
       accountRid: mySavings._id
+    }, {
+      description: 'Checking Opening Balance',
+      principalAmount: 1000.00,
+      eventType: 'transaction',
+      accountRid: myChecking._id
     }, {
       description: 'Checking Deposit #1',
       principalAmount: 200.00,
