@@ -45,18 +45,11 @@ Accounts.prototype.postGetAction = function (accts, done) {
     $project: {
       accountRid: "$accountRid",
       principalAmount: {
-        $cond: {
-          if: {$eq: ["$transactionType", "disbursement"]},
-          then: 0,
-          else: "$principalAmount"
-        }
+        $cond: [{$eq: ["$transactionType", "disbursement"]}, 0, "$principalAmount"]
       },
       disbursementAmount: {
-        $cond: {
-          if: {$eq: ["$transactionType", "disbursement"]},
-          then: "$principalAmount",
-          else: 0
-        }
+        $cond: [
+          {$eq: ["$transactionType", "disbursement"]}, "$principalAmount", 0]
       },
       interestAmount: "$interestAmount"
     }
