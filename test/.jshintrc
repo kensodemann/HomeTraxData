@@ -1,0 +1,12 @@
+{
+  "expr": true,
+  "unused": true,
+  "undef": true,
+  "node": true,
+  "predef": [
+    "afterEach",
+    "beforeEach",
+    "describe",
+    "it"
+  ]
+}

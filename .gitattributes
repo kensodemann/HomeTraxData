@@ -1,0 +1,23 @@
+*	text=auto
+
+*.css	text
+*.html	text
+*.js	text
+*.json	text
+*.md	text
+*.scss	text
+*.svg	text
+*.xml	text
+
+ionic.project	text
+
+.jscsrc		text
+.jshintignore	text
+.bowerrc	text
+.jshintrc	text
+.editorconfig	text
+.gitattributes	text
+.gitignore	text
+
+
+*.png	binary

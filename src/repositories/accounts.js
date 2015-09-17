@@ -16,7 +16,7 @@ function Accounts() {
 
 util.inherits(Accounts, RepositoryBase);
 
-Accounts.prototype.preSaveAction = function (req, done) {
+Accounts.prototype.preSaveAction = function(req, done) {
   makeTypesConsistent(req);
   done(null);
 };
@@ -25,78 +25,84 @@ function makeTypesConsistent(req) {
   if (!!req.body.entityRid) {
     req.body.entityRid = new ObjectId(req.body.entityRid);
   }
+
   if (!!req.body.amount) {
     req.body.amount = Number(req.body.amount);
   }
 }
 
-Accounts.prototype.preRemoveAction = function (req, done) {
+Accounts.prototype.preRemoveAction = function(req, done) {
   db.events.remove({accountRid: new ObjectId(req.params.id)}, done);
 };
 
-Accounts.prototype.validate = function (req, done) {
+Accounts.prototype.validate = function(req, done) {
   done(null, null);
 };
 
-Accounts.prototype.postGetAction = function (accts, done) {
+Accounts.prototype.postGetAction = function(accts, done) {
   db.events.aggregate([{
     $match: {eventType: 'transaction'}
   }, {
     $project: {
-      accountRid: "$accountRid",
+      accountRid: '$accountRid',
       principalAmount: {
-        $cond: [{$eq: ["$transactionType", "disbursement"]}, 0, "$principalAmount"]
+        $cond: [{$eq: ['$transactionType', 'disbursement']}, 0, '$principalAmount']
       },
       disbursementAmount: {
         $cond: [
-          {$eq: ["$transactionType", "disbursement"]}, "$principalAmount", 0]
+          {$eq: ['$transactionType', 'disbursement']}, '$principalAmount', 0]
       },
-      interestAmount: "$interestAmount"
+      interestAmount: '$interestAmount'
     }
   }, {
     $group: {
-      _id: "$accountRid",
+      _id: '$accountRid',
       numberOfTransactions: {$sum: 1},
-      disbursements: {$sum: "$disbursementAmount"},
-      principalPaid: {$sum: "$principalAmount"},
-      interestPaid: {$sum: "$interestAmount"}
+      disbursements: {$sum: '$disbursementAmount'},
+      principalPaid: {$sum: '$principalAmount'},
+      interestPaid: {$sum: '$interestAmount'}
     }
-  }], function (err, e) {
-    accts.forEach(function (acct) {
+  }], function(err, e) {
+    accts.forEach(function(acct) {
       var ttls = findAccountTotals(e, acct);
       assignTotals(acct, ttls);
     });
+
     done(err, accts);
   });
 };
 
 var accounts = new Accounts();
 
-module.exports = function (app) {
+module.exports = function(app) {
   app.get('/accounts', redirect.toHttps, authentication.requiresApiLogin,
-    function (req, res) {
+    function(req, res) {
       accounts.get(req, res);
     });
+
   app.get('/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
-    function (req, res) {
+    function(req, res) {
       accounts.getOne(req, res);
     });
+
   app.post('/accounts/:id?', redirect.toHttps, authentication.requiresApiLogin,
-    function (req, res) {
+    function(req, res) {
       accounts.save(req, res);
     });
+
   app.delete('/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
-    function (req, res) {
+    function(req, res) {
       accounts.remove(req, res);
     });
 };
 
 
 function findAccountTotals(e, acct) {
-  return _.find(e, function (item) {
+  return _.find(e, function(item) {
     return item._id.toString() === acct._id.toString();
   });
 }
+
 function assignTotals(acct, ttls) {
   if (!!ttls) {
     acct.numberOfTransactions = ttls.numberOfTransactions;

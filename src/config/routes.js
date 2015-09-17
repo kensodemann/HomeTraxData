@@ -1,7 +1,6 @@
 'use strict';
 
 var authentication = require('../services/authentication');
-var config = require('./config');
 var redirect = require('../services/redirect');
 
 module.exports = function(app) {
@@ -14,6 +13,7 @@ module.exports = function(app) {
   require('../repositories/versions')(app);
 
   app.post('/login', redirect.toHttps, function(req, res) {authentication.authenticate(req, res);});
+
   app.post('/logout', function(req, res) {
     req.logout();
     res.end();

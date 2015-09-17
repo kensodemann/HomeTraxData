@@ -1,7 +1,6 @@
 'use strict';
 
 var authentication = require('../services/authentication');
-var error = require('../services/error');
 var redirect = require('../services/redirect');
 
 function get(req, res) {
