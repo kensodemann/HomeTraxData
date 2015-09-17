@@ -1,0 +1,45 @@
+{
+  "validateIndentation": 2,
+  "excludeFiles": [
+    "node_modules/**",
+    "www/**",
+    "lib/**",
+    "bower_components/**",
+    "platforms/**",
+    "plugins/**",
+    "server/node_modules/**"
+  ],
+  "requirePaddingNewLinesAfterBlocks": {
+    "allExcept": [
+      "inNewExpressions",
+      "inArrayExpressions"
+    ]
+  },
+  "requirePaddingNewLinesAfterUseStrict": true,
+  "disallowEmptyBlocks": true,
+  "requireSpacesInForStatement": true,
+  "requireSpacesInConditionalExpression": true,
+  "requireSpaceBetweenArguments": true,
+  "requireSpaceAfterKeywords": [
+    "do",
+    "for",
+    "if",
+    "else",
+    "switch",
+    "case",
+    "try",
+    "catch",
+    "void",
+    "while",
+    "with",
+    "return",
+    "typeof"
+  ],
+  "disallowSpacesInFunction": {
+    "beforeOpeningRoundBrace": true
+  },
+  "validateQuoteMarks": {
+    "mark": "'",
+    "escape": true
+  }
+}

@@ -7,7 +7,6 @@ var expect = require('chai').expect;
 var express = require('express');
 var proxyquire = require('proxyquire');
 var request = require('supertest');
-var sinon = require('sinon');
 
 describe('currentUser', function() {
   var app;

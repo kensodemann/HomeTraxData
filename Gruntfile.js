@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -11,26 +11,11 @@ module.exports = function(grunt) {
     // Code Quality Checks
     jshint: {
       options: {
-        strict: true
+        strict: true,
+        jshintrc: true
       },
       server: {
-        src: ['src/**/*.js', 'Gruntfile.js'],
-        options: {
-          node: true
-        }
-      },
-      serverTest: {
-        src: ['test/**/*.js'],
-        options: {
-          expr: true,
-          globals: {
-            afterEach: true,
-            beforeEach: true,
-            describe: true,
-            it: true
-          },
-          node: true
-        }
+        src: ['src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
       }
     },
 

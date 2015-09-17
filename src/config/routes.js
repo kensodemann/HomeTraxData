@@ -1,7 +1,6 @@
 'use strict';
 
 var authentication = require('../services/authentication');
-var config = require('./config');
 var redirect = require('../services/redirect');
 
 module.exports = function(app) {
