@@ -14,9 +14,7 @@ module.exports = function(grunt) {
         strict: true,
         jshintrc: true
       },
-      server: {
-        src: ['src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
-      }
+      src: ['src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
     },
 
     jscs: {
