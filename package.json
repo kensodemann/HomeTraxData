@@ -44,7 +44,8 @@
     "proxyquire": "^1.0.0",
     "q": "^1.1.2",
     "sinon": "^1.10.0",
-    "supertest": "^1.0.1"
+    "supertest": "^1.0.1",
+    "grunt-jscs": "~2.1.0"
   },
   "bundleDependencies": [],
   "private": true,

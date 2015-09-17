@@ -137,4 +137,5 @@ describe('eventCategories Routes', function() {
     });
   }
 })
+
 ;

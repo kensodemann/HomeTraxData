@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "./public/style/*.css*"],
+    clean: ['public/dist', './public/style/*.css*'],
 
     // Code Quality Checks
     jshint: {
@@ -16,6 +16,13 @@ module.exports = function (grunt) {
       },
       server: {
         src: ['src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
+      }
+    },
+
+    jscs: {
+      src: '**/*.js',
+      options: {
+        config: true
       }
     },
 
@@ -42,11 +49,12 @@ module.exports = function (grunt) {
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-mocha-test');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'mochaTest', 'jshint', 'jscs']);
   grunt.registerTask('dev', ['default', 'watch']);
 };

@@ -16,15 +16,18 @@ exports.authenticate = function(req, res, next) {
     if (err) {
       return next(err);
     }
+
     if (!user) {
       res.send({
         success: false
       });
     }
+
     req.logIn(user, function(err) {
       if (err) {
         return next(err);
       }
+
       var token = jwt.sign(user, secret.jwtCertificate);
       res.send({
         success: true,
@@ -33,6 +36,7 @@ exports.authenticate = function(req, res, next) {
       });
     });
   });
+
   auth(req, res, next);
 };
 
@@ -80,6 +84,7 @@ function userIsNotAuthenticated(req) {
   } catch (err) {
     return true;
   }
+
   return false;
 }
 
@@ -87,6 +92,7 @@ function getAuthToken(req) {
   if (!req.headers.authorization) {
     return undefined;
   }
+
   return req.headers.authorization.split(' ')[1];
 }
 

@@ -55,6 +55,7 @@ describe('authentication', function() {
       };
       res = sinon.stub({
         status: function() {},
+
         end: function() {}
       });
       next = sinon.spy();
@@ -124,6 +125,7 @@ describe('authentication', function() {
       };
       res = sinon.stub({
         status: function() {},
+
         end: function() {}
       });
       next = sinon.spy();
@@ -165,6 +167,7 @@ describe('authentication', function() {
     beforeEach(function() {
       req = sinon.stub({
         isAuthenticated: function() {},
+
         params: {
           id: 1
         },
@@ -174,6 +177,7 @@ describe('authentication', function() {
       });
       res = sinon.stub({
         status: function() {},
+
         end: function() {}
       });
       next = sinon.spy();

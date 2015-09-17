@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
-var ObjectId = require("mongojs").ObjectId;
+var ObjectId = require('mongojs').ObjectId;
 
 describe('events Routes', function() {
   var app;
@@ -69,6 +69,7 @@ describe('events Routes', function() {
               expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
             }
           });
+
           done();
         });
     });
@@ -84,6 +85,7 @@ describe('events Routes', function() {
               expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
             }
           });
+
           done();
         });
     });
@@ -208,7 +210,7 @@ describe('events Routes', function() {
         });
     });
 
-    it("does not allow modifications to non existent events", function(done) {
+    it('does not allow modifications to non existent events', function(done) {
       request(app)
         .post('/events/53a4dd887c6dc30000bee3af')
         .send({
@@ -574,4 +576,5 @@ describe('events Routes', function() {
     });
   }
 })
+
 ;

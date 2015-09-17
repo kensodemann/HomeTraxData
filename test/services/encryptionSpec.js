@@ -27,6 +27,7 @@ describe('encryption', function() {
       mockHmac = sinon.stub({
         update: function() {
         },
+
         digest: function() {
         }
       });
@@ -37,6 +38,7 @@ describe('encryption', function() {
       mockCrypto = sinon.stub({
         randomBytes: function() {
         },
+
         createHmac: function() {
         }
       });
@@ -46,7 +48,7 @@ describe('encryption', function() {
   });
 
   beforeEach(function() {
-    encryption = proxyquire('../../src/services/encryption',{
+    encryption = proxyquire('../../src/services/encryption', {
       'crypto': mockCrypto
     });
   });

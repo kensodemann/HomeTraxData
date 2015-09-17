@@ -11,7 +11,7 @@ var ServerApp = require('../src/serverApp');
 var serverApp;
 describe('ServerApp', function() {
   beforeEach(function() {
-    sinon.stub(console, "warn");
+    sinon.stub(console, 'warn');
     serverApp = new ServerApp();
   });
 

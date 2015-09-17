@@ -13,6 +13,7 @@ module.exports = function(app) {
   require('../repositories/versions')(app);
 
   app.post('/login', redirect.toHttps, function(req, res) {authentication.authenticate(req, res);});
+
   app.post('/logout', function(req, res) {
     req.logout();
     res.end();

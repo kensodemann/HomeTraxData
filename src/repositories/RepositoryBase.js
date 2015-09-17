@@ -21,10 +21,12 @@ RepositoryBase.prototype.get = function(req, res) {
     if (err) {
       return error.send(err, res);
     }
+
     my.postGetAction(item, function(err, item) {
       if (err) {
         return error.send(err, res);
       }
+
       res.send(item);
     });
   });
@@ -37,9 +39,11 @@ RepositoryBase.prototype.getOne = function(req, res) {
     if (!!err) {
       return error.send(err, res);
     }
+
     if (!item) {
       res.status(404);
     }
+
     res.send(item);
   });
 };
@@ -57,6 +61,7 @@ RepositoryBase.prototype.save = function(req, res) {
       if (!!err) {
         return error.send(err, res);
       }
+
       if (!!msg) {
         return error.send(msg, res);
       }
@@ -65,6 +70,7 @@ RepositoryBase.prototype.save = function(req, res) {
         if (!!err) {
           return error.send(err, res);
         }
+
         if (status === 200) {
           performSave();
         } else {
@@ -89,9 +95,11 @@ RepositoryBase.prototype.save = function(req, res) {
       if (!!err) {
         return error.send(err, res);
       }
+
       if (!req.params || !req.params.id) {
         res.status(201);
       }
+
       res.send(item);
     });
   }
@@ -104,6 +112,7 @@ RepositoryBase.prototype.remove = function(req, res) {
     if (!!err) {
       return error.send(err, res);
     }
+
     if (status === 200) {
       removeItem();
     } else {
@@ -117,10 +126,12 @@ RepositoryBase.prototype.remove = function(req, res) {
       if (!!err) {
         return error.send(err, res);
       }
+
       my.collection.remove({_id: new ObjectId(req.params.id)}, function(err) {
         if (!!err) {
           return error.send(err, res);
         }
+
         res.send();
       });
     });
