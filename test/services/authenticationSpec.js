@@ -83,15 +83,15 @@ describe('authentication', function() {
 
     it('does not set the req.user if there is no token', function() {
       req.headers = {};
-      mockJWT.verify.throws('InvalidToken');
       mockJWT.verify.returns('Something');
+      mockJWT.verify.throws('InvalidToken');
       authentication.requiresApiLogin(req, res, next);
       expect(req.user).to.not.exist;
     });
 
     it('does not set the req.user if the token is invalid', function() {
-      mockJWT.verify.throws('InvalidToken');
       mockJWT.verify.returns('Something');
+      mockJWT.verify.throws('InvalidToken');
       authentication.requiresApiLogin(req, res, next);
       expect(req.user).to.not.exist;
     });
