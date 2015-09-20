@@ -5,7 +5,7 @@ var colors = require('../services/colors');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
 var error = require('../services/error');
-var ObjectId = require("mongojs").ObjectId;
+var ObjectId = require('mongojs').ObjectId;
 var redirect = require('../services/redirect');
 
 //noinspection JSUnusedLocalSymbols
@@ -108,15 +108,16 @@ function validateUser(req, callback) {
   }
 
   db.users.findOne({
-      "_id": {
+      '_id': {
         $ne: new ObjectId(user._id)
       },
-      "username": user.username
+      'username': user.username
     },
     function(err, found) {
       if (found) {
         err = new Error('User ' + found.username + ' already exists');
       }
+
       callback(err, user);
     });
 }
@@ -152,6 +153,7 @@ function insert(user, res) {
       if (err) {
         return error.send(err, res);
       }
+
       res.status(201);
       return res.send(user);
     });
@@ -173,6 +175,7 @@ function updateUser(id, userData, res) {
     if (err) {
       return error.send(err, res);
     }
+
     res.status(200);
     return res.send(userData);
   });
@@ -194,6 +197,7 @@ function updateUserPassword(id, passwordData, res) {
     if (err) {
       return error.send(err, res);
     }
+
     res.status(200);
     res.send();
   });
@@ -201,8 +205,11 @@ function updateUserPassword(id, passwordData, res) {
 
 module.exports = function(app){
   app.get('/users', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {get(req, res);});
+
   app.get('/users/:id', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {getById(req, res);});
+
   app.post('/users', authentication.requiresRole('admin'), function(req, res) {add(req, res);});
+
   app.put('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {update(req, res);});
 

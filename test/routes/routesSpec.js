@@ -3,10 +3,8 @@
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var serveStatic = require('serve-static');
 
 describe('Basic Routes', function() {
   var app;
@@ -20,7 +18,7 @@ describe('Basic Routes', function() {
   describe('login', function() {
     var authCalled;
     var authStub = {
-      authenticate: function(req, res, next) {
+      authenticate: function(req, res) {
         authCalled = true;
         res.send({
           success: true

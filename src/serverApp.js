@@ -1,7 +1,6 @@
 'use strict';
 
 var express = require('express');
-var config = require('./config/config');
 
 var ServerApp = function() {
   var self = this;
@@ -12,11 +11,11 @@ var ServerApp = function() {
     self.ipaddress = process.env.OPENSHIFT_NODEJS_IP || process.env.IP;
     self.port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT ||  8080;
 
-    if (typeof self.ipaddress === "undefined") {
+    if (typeof self.ipaddress === 'undefined') {
       //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
       //  allows us to run/test the app locally.
       console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-      self.ipaddress = "127.0.0.1";
+      self.ipaddress = '127.0.0.1';
     }
   };
 
@@ -27,11 +26,12 @@ var ServerApp = function() {
    *  @param {string} sig  Signal to terminate on.
    */
   self.terminator = function(sig) {
-    if (typeof sig === "string") {
+    if (typeof sig === 'string') {
       console.log('%s: Received %s - terminating the app ...',
         Date(Date.now()), sig);
       process.exit(1);
     }
+
     console.log('%s: Node src stopped.', Date(Date.now()));
   };
 

@@ -1,4 +1,3 @@
-/* global beforeEach describe it */
 'use strict';
 
 var expect = require('chai').expect;
@@ -56,6 +55,7 @@ describe('authentication', function() {
       };
       res = sinon.stub({
         status: function() {},
+
         end: function() {}
       });
       next = sinon.spy();
@@ -83,15 +83,15 @@ describe('authentication', function() {
 
     it('does not set the req.user if there is no token', function() {
       req.headers = {};
-      mockJWT.verify.throws('InvalidToken');
       mockJWT.verify.returns('Something');
+      mockJWT.verify.throws('InvalidToken');
       authentication.requiresApiLogin(req, res, next);
       expect(req.user).to.not.exist;
     });
 
     it('does not set the req.user if the token is invalid', function() {
-      mockJWT.verify.throws('InvalidToken');
       mockJWT.verify.returns('Something');
+      mockJWT.verify.throws('InvalidToken');
       authentication.requiresApiLogin(req, res, next);
       expect(req.user).to.not.exist;
     });
@@ -125,6 +125,7 @@ describe('authentication', function() {
       };
       res = sinon.stub({
         status: function() {},
+
         end: function() {}
       });
       next = sinon.spy();
@@ -166,6 +167,7 @@ describe('authentication', function() {
     beforeEach(function() {
       req = sinon.stub({
         isAuthenticated: function() {},
+
         params: {
           id: 1
         },
@@ -175,6 +177,7 @@ describe('authentication', function() {
       });
       res = sinon.stub({
         status: function() {},
+
         end: function() {}
       });
       next = sinon.spy();

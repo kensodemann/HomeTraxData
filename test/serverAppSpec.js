@@ -7,12 +7,11 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var db = require('../src/config/database');
 var ServerApp = require('../src/serverApp');
-var path = require('path');
 
 var serverApp;
 describe('ServerApp', function() {
   beforeEach(function() {
-    sinon.stub(console, "warn");
+    sinon.stub(console, 'warn');
     serverApp = new ServerApp();
   });
 

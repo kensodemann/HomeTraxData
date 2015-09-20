@@ -6,31 +6,21 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "./public/style/*.css*"],
+    clean: ['public/dist', './public/style/*.css*'],
 
     // Code Quality Checks
     jshint: {
       options: {
-        strict: true
+        strict: true,
+        jshintrc: true
       },
-      server: {
-        src: ['src/**/*.js', 'Gruntfile.js'],
-        options: {
-          node: true
-        }
-      },
-      serverTest: {
-        src: ['test/**/*.js'],
-        options: {
-          expr: true,
-          globals: {
-            afterEach: true,
-            beforeEach: true,
-            describe: true,
-            it: true
-          },
-          node: true
-        }
+      src: ['src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
+    },
+
+    jscs: {
+      src: '**/*.js',
+      options: {
+        config: true
       }
     },
 
@@ -57,11 +47,12 @@ module.exports = function(grunt) {
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');;
+  grunt.loadNpmTasks('grunt-jscs');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-mocha-test');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'mochaTest', 'jshint', 'jscs']);
   grunt.registerTask('dev', ['default', 'watch']);
 };
