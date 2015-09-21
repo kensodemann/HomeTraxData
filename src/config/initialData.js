@@ -1,12 +1,10 @@
 'use strict';
 
-var colors = require('../services/colors');
 var db = require('./database');
 var encryption = require('../services/encryption');
 
 module.exports = function() {
   createDefaultAdministrator();
-  createDefaultHousehold();
 };
 
 function createDefaultAdministrator() {
@@ -23,20 +21,7 @@ function createDefaultAdministrator() {
         salt: salt,
         hashedPassword: hash,
         isDefaultAdmin: true,
-        colors: colors.getPallet(0),
         roles: ['admin']
-      });
-    }
-  });
-}
-
-function createDefaultHousehold() {
-  db.entities.find({entityType: 'household'}, function(err, h) {
-    if (h.length === 0) {
-      db.entities.save({
-        name: 'My House',
-        addressLine1: 'In the middle of my street',
-        entityType: 'household'
       });
     }
   });
