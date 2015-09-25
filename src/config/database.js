@@ -2,11 +2,8 @@
 
 var mongojs = require('mongojs');
 
-var collections = ['accounts',
+var collections = [
   'entities',
-  'events',
-  'eventCategories',
-  'households',
   'users'];
 
 function openShiftConnectString() {

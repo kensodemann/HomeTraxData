@@ -1,6 +1,5 @@
 'use strict';
 
-var colors = require('../../src/services/colors');
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -326,7 +325,6 @@ describe('users Routes', function() {
               expect(user.roles).to.deep.equal(['worker']);
               expect(user.salt).to.not.be.undefined;
               expect(user.hashedPassword).to.not.be.undefined;
-              expect(user.colors).to.deep.equal(colors.userPallets[1]);
               expect(user._id.toString()).to.equal(res.body._id);
               done();
             });
@@ -346,14 +344,12 @@ describe('users Routes', function() {
           lastName: 'Sodemann',
           username: 'kws@email.com',
           salt: 'NH4Cl',
-          colors: ['#a0a0a0', '#b0b0b0', '#c0c0c0'],
           password: 'ThisIsFreaky'
         }, {
           firstName: 'Lisa',
           lastName: 'Buerger',
           username: 'llb@email.com',
           salt: 'CaCl2',
-          colors: ['#d0d0d0', '#e0e0e0', '#f0f0f0'],
           password: 'IAmSexyBee'
         }], function() {
           db.users.findOne({
@@ -450,7 +446,6 @@ describe('users Routes', function() {
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
-      testUser.colors = ['#ffeedc'];
       testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
         .put('/users/' + testUser._id)
@@ -470,14 +465,13 @@ describe('users Routes', function() {
         });
     });
 
-    it('Does not effect the salt, password, or colors', function(done) {
+    it('Does not effect the salt or password', function(done) {
       var origSalt = testUser.salt;
       var origPassword = testUser.password;
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
       testUser.salt = 'NaCl';
-      testUser.colors = ['#111111', '#222222', '#333333'];
       testUser.password = 'SomethingElse';
       request(app)
         .put('/users/' + testUser._id)
@@ -490,7 +484,6 @@ describe('users Routes', function() {
             function(err, user) {
               expect(user.salt).to.equal(origSalt);
               expect(user.password).to.equal(origPassword);
-              expect(user.colors).to.deep.equal(['#a0a0a0', '#b0b0b0', '#c0c0c0']);
               done();
             });
         });
