@@ -385,7 +385,7 @@ describe('users Routes', function() {
 
     it('Requires admin or matching current user', function(done) {
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -397,7 +397,7 @@ describe('users Routes', function() {
     it('Does not allow multiple users with the same username', function(done) {
       testUser.username = 'llb@email.com';
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -409,7 +409,7 @@ describe('users Routes', function() {
     it('Does not allow username to be empty', function(done) {
       testUser.username = '';
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -421,7 +421,7 @@ describe('users Routes', function() {
     it('Does not allow firstName to be empty', function(done) {
       testUser.firstName = '';
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -433,7 +433,7 @@ describe('users Routes', function() {
     it('Does not allow lastName to be empty', function(done) {
       testUser.lastName = '';
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -448,7 +448,7 @@ describe('users Routes', function() {
       testUser.username = 'ff@email.com';
       testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -474,7 +474,7 @@ describe('users Routes', function() {
       testUser.salt = 'NaCl';
       testUser.password = 'SomethingElse';
       request(app)
-        .put('/users/' + testUser._id)
+        .post('/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);

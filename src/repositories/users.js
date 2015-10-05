@@ -208,7 +208,7 @@ module.exports = function(app) {
     add(req, res);
   });
 
-  app.put('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+  app.post('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {
       update(req, res);
     });
