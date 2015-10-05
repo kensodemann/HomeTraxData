@@ -208,12 +208,12 @@ module.exports = function(app) {
     add(req, res);
   });
 
-  app.put('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+  app.post('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {
       update(req, res);
     });
 
-  app.put('/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+  app.post('/users/:id/password', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {
       changePassword(req, res);
     });
