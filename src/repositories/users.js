@@ -213,7 +213,7 @@ module.exports = function(app) {
       update(req, res);
     });
 
-  app.put('/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+  app.post('/users/:id/password', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {
       changePassword(req, res);
     });
