@@ -3,7 +3,7 @@
 var mongojs = require('mongojs');
 
 var collections = [
-  'entities',
+  'projects',
   'users'];
 
 function openShiftConnectString() {
