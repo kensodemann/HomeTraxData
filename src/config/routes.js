@@ -5,6 +5,7 @@ var redirect = require('../services/redirect');
 
 module.exports = function(app) {
   require('../repositories/currentUser')(app);
+  require('../repositories/projects')(app);
   require('../repositories/users')(app);
   require('../repositories/versions')(app);
 
