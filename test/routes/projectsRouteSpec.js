@@ -107,7 +107,7 @@ describe('projects routes', function() {
         });
     });
 
-    it('saves new entities', function(done) {
+    it('saves the new projct', function(done) {
       request(app)
         .post('/projects')
         .send({

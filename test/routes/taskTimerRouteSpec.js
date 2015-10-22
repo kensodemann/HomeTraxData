@@ -18,7 +18,7 @@ describe('projects routes', function() {
       next();
     }
   };
-  var myFavoriteProject;
+  var myFavoriteTaskTimer;
   var requiresApiLoginCalled;
 
   beforeEach(function() {
@@ -166,7 +166,7 @@ describe('projects routes', function() {
         db.taskTimers.findOne({
           isActive: true
         }, function(err, e) {
-          myFavoriteProject = e;
+          myFavoriteTaskTimer = e;
           done();
         });
       });

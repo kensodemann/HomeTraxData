@@ -5,6 +5,7 @@ var mongojs = require('mongojs');
 var collections = [
   'projects',
   'taskTimers',
+  'timesheets',
   'users'
 ];
 
