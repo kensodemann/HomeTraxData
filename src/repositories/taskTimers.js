@@ -15,11 +15,25 @@ function TaskTimers() {
 util.inherits(TaskTimers, RepositoryBase);
 
 TaskTimers.prototype.get = function(req, res) {
-  this.criteria = {
-    userRid: new ObjectId(req.user._id)
-  };
+  this.criteria = currentUserPredicate(req);
   return RepositoryBase.prototype.get.call(this, req, res);
 };
+
+TaskTimers.prototype.preSaveAction = function(req, done) {
+  req.body.userRid = new ObjectId(req.user._id);
+  return RepositoryBase.prototype.preSaveAction.call(this, req, done);
+};
+
+TaskTimers.prototype.preCheckStatus = function(req, done) {
+  this.criteria = currentUserPredicate(req);
+  return RepositoryBase.prototype.preCheckStatus.call(this, req, done);
+};
+
+function currentUserPredicate(req) {
+  return {
+    userRid: new ObjectId(req.user._id)
+  };
+}
 
 var repository = new TaskTimers();
 
@@ -27,5 +41,10 @@ module.exports = function(app) {
   app.get('/TaskTimers', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {
       repository.get(req, res);
+    });
+
+  app.post('/TaskTimers/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {
+      repository.save(req, res);
     });
 };

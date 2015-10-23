@@ -8,9 +8,13 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('projects routes', function() {
+describe('task timer routes', function() {
   var app;
   var testUser;
+
+  var myUserId = '561fa1b20e9397e10490f227';
+  var otherUserId = '561fa1b20e9397e10490f228';
+
   var authStub = {
     requiresApiLogin: function(req, res, next) {
       req.user = testUser;
@@ -19,6 +23,7 @@ describe('projects routes', function() {
     }
   };
   var myFavoriteTaskTimer;
+  var notMyTaskTimer;
   var requiresApiLoginCalled;
 
   beforeEach(function() {
@@ -29,7 +34,7 @@ describe('projects routes', function() {
 
   beforeEach(function() {
     testUser = {
-      _id: new ObjectId('561fa1b20e9397e10490f227')
+      _id: new ObjectId(myUserId)
     };
   });
 
@@ -69,6 +74,94 @@ describe('projects routes', function() {
     });
   });
 
+  describe('create POST', function() {
+    it('requires an API login', function(done) {
+      request(app)
+        .post('/taskTimers')
+        .send({
+          name: 'Create Data Route',
+          jiraTaskId: 'WPM-345',
+          sbvbTaskId: 'RFP12234',
+          isActive: false,
+          workDate: '2015-09-13',
+          seconds: 1232,
+          task: {
+            _id: new ObjectId('561fa1b20e9397e10490f233'),
+            name: 'Design',
+            sbvbStage: 3
+          }
+        }).end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
+          done();
+        });
+    });
+
+    it('saves the new taskTimer setting the userRid to the current user', function(done) {
+      request(app)
+        .post('/taskTimers')
+        .send({
+          name: 'This is a new one',
+          jiraTaskId: 'WPM-348',
+          sbvbTaskId: 'RFP12234',
+          isActive: false,
+          workDate: '2015-09-13',
+          seconds: 1232,
+          task: {
+            _id: new ObjectId('561fa1b20e9397e10490f233'),
+            name: 'Design',
+            sbvbStage: 3
+          }
+        }).end(function(err, res) {
+          expect(!!err).to.be.false;
+          expect(res.status).to.equal(201);
+          db.taskTimers.find({}, function(er, tts) {
+            expect(tts.length).to.equal(8);
+            db.taskTimers.findOne({jiraTaskId: 'WPM-348'}, function(err, tt) {
+              expect(tt.userRid.toString()).to.equal(myUserId);
+              done();
+            });
+          });
+        });
+    });
+  });
+
+  describe('update POST', function() {
+    it('requires an API login', function(done) {
+      request(app)
+        .post('/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send(myFavoriteTaskTimer)
+        .end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
+          done();
+        });
+    });
+
+    it('returns 404 if the item is not for the current user', function(done) {
+      notMyTaskTimer.name = 'should not edit this';
+      request(app)
+        .post('/taskTimers/' + notMyTaskTimer._id.toString())
+        .send(notMyTaskTimer)
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+
+    it('saves the changes to the existing taskTimer', function(done) {
+      myFavoriteTaskTimer.name = 'some other name';
+      request(app)
+        .post('/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send(myFavoriteTaskTimer)
+        .end(function() {
+          db.taskTimers.findOne({_id: new ObjectId(myFavoriteTaskTimer._id)}, function(err, tt) {
+            expect(tt.name).to.equal('some other name');
+            expect(tt._id.toString()).to.equal(myFavoriteTaskTimer._id.toString());
+            done();
+          });
+        });
+    });
+  });
+
   function loadData(done) {
     db.taskTimers.remove(function() {
       db.taskTimers.insert([{
@@ -78,7 +171,7 @@ describe('projects routes', function() {
         isActive: false,
         workDate: '2015-09-13',
         seconds: 1232,
-        userRid: new ObjectId('561fa1b20e9397e10490f227'),
+        userRid: new ObjectId(myUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
@@ -91,7 +184,7 @@ describe('projects routes', function() {
         isActive: false,
         workDate: '2015-09-13',
         seconds: 2939,
-        userRid: new ObjectId('561fa1b20e9397e10490f228'),
+        userRid: new ObjectId(otherUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Design',
@@ -104,7 +197,7 @@ describe('projects routes', function() {
         isActive: false,
         workDate: '2015-09-14',
         seconds: 736,
-        userRid: new ObjectId('561fa1b20e9397e10490f228'),
+        userRid: new ObjectId(otherUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
@@ -117,7 +210,7 @@ describe('projects routes', function() {
         isActive: false,
         workDate: '2015-09-14',
         seconds: 4359,
-        userRid: new ObjectId('561fa1b20e9397e10490f227'),
+        userRid: new ObjectId(myUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f232'),
           name: 'Design',
@@ -130,7 +223,7 @@ describe('projects routes', function() {
         isActive: true,
         workDate: '2015-09-15',
         seconds: 2754,
-        userRid: new ObjectId('561fa1b20e9397e10490f227'),
+        userRid: new ObjectId(myUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f232'),
           name: 'Design',
@@ -143,7 +236,7 @@ describe('projects routes', function() {
         isActive: true,
         workDate: '2015-09-14',
         seconds: 11432,
-        userRid: new ObjectId('561fa1b20e9397e10490f228'),
+        userRid: new ObjectId(otherUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
@@ -156,7 +249,7 @@ describe('projects routes', function() {
         isActive: false,
         workDate: '2015-09-12',
         seconds: 5534,
-        userRid: new ObjectId('561fa1b20e9397e10490f227'),
+        userRid: new ObjectId(myUserId),
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
@@ -164,10 +257,17 @@ describe('projects routes', function() {
         }
       }], function() {
         db.taskTimers.findOne({
-          isActive: true
-        }, function(err, e) {
-          myFavoriteTaskTimer = e;
-          done();
+          isActive: true,
+          userRid: new ObjectId(myUserId)
+        }, function(err, tt) {
+          myFavoriteTaskTimer = tt;
+          db.taskTimers.findOne({
+            isActive: true,
+            userRid: new ObjectId(otherUserId)
+          }, function(err, tt) {
+            notMyTaskTimer = tt;
+            done();
+          });
         });
       });
     });

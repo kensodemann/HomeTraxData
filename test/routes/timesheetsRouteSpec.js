@@ -102,7 +102,7 @@ describe('projects routes', function() {
     });
   });
 
-  describe('POST', function() {
+  describe('create POST', function() {
     it('requires an API login call', function(done) {
       request(app)
         .post('/timesheets')
