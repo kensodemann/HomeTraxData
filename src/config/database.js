@@ -4,7 +4,10 @@ var mongojs = require('mongojs');
 
 var collections = [
   'projects',
-  'users'];
+  'taskTimers',
+  'timesheets',
+  'users'
+];
 
 function openShiftConnectString() {
   return process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
