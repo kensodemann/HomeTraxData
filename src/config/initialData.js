@@ -46,7 +46,7 @@ function createStages() {
 function defaultStages() {
   return [{
     stageNumber: 1,
-    name: 'Requirements Definition',
+    name: 'Requirements Definition'
   }, {
     stageNumber: 2,
     name: 'Functional Specification'
