@@ -274,8 +274,6 @@ describe('task timer routes', function() {
   }
 
   function removeData(done) {
-    db.taskTimers.remove(function() {
-      done();
-    });
+    db.taskTimers.remove(done);
   }
 });

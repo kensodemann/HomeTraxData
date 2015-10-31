@@ -8,7 +8,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('projects routes', function() {
+describe('timesheets routes', function() {
   var app;
   var testUser;
   var authStub = {
@@ -196,8 +196,6 @@ describe('projects routes', function() {
   }
 
   function removeData(done) {
-    db.timesheets.remove(function() {
-      done();
-    });
+    db.timesheets.remove(done);
   }
 });

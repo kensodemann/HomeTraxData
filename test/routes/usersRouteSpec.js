@@ -74,9 +74,7 @@ describe('users Routes', function() {
     });
 
     afterEach(function(done) {
-      db.users.remove(function() {
-        done();
-      });
+      db.users.remove(done);
     });
 
     it('Requires Admin User', function(done) {

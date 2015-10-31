@@ -263,8 +263,6 @@ describe('projects routes', function() {
   }
 
   function removeData(done) {
-    db.projects.remove(function() {
-      done();
-    });
+    db.projects.remove(done);
   }
 });
