@@ -28,7 +28,9 @@ describe('task timer routes', function() {
 
   beforeEach(function() {
     app = express();
-    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.urlencoded({
+      extended: true
+    }));
     app.use(bodyParser.json());
   });
 
@@ -79,12 +81,14 @@ describe('task timer routes', function() {
       request(app)
         .post('/taskTimers')
         .send({
-          name: 'Create Data Route',
-          jiraTaskId: 'WPM-345',
-          sbvbTaskId: 'RFP12234',
           isActive: false,
           workDate: '2015-09-13',
           seconds: 1232,
+          project: {
+            name: 'Create Data Route',
+            jiraTaskId: 'WPM-345',
+            sbvbTaskId: 'RFP12234'
+          },
           task: {
             _id: new ObjectId('561fa1b20e9397e10490f233'),
             name: 'Design',
@@ -100,12 +104,14 @@ describe('task timer routes', function() {
       request(app)
         .post('/taskTimers')
         .send({
-          name: 'This is a new one',
-          jiraTaskId: 'WPM-348',
-          sbvbTaskId: 'RFP12234',
           isActive: false,
           workDate: '2015-09-13',
           seconds: 1232,
+          project: {
+            name: 'This is a new one',
+            jiraTaskId: 'WPM-348',
+            sbvbTaskId: 'RFP12234'
+          },
           task: {
             _id: new ObjectId('561fa1b20e9397e10490f233'),
             name: 'Design',
@@ -116,7 +122,9 @@ describe('task timer routes', function() {
           expect(res.status).to.equal(201);
           db.taskTimers.find({}, function(er, tts) {
             expect(tts.length).to.equal(8);
-            db.taskTimers.findOne({jiraTaskId: 'WPM-348'}, function(err, tt) {
+            db.taskTimers.findOne({
+              'project.jiraTaskId': 'WPM-348'
+            }, function(err, tt) {
               expect(tt.userRid.toString()).to.equal(myUserId);
               done();
             });
@@ -153,7 +161,9 @@ describe('task timer routes', function() {
         .post('/taskTimers/' + myFavoriteTaskTimer._id.toString())
         .send(myFavoriteTaskTimer)
         .end(function() {
-          db.taskTimers.findOne({_id: new ObjectId(myFavoriteTaskTimer._id)}, function(err, tt) {
+          db.taskTimers.findOne({
+            _id: new ObjectId(myFavoriteTaskTimer._id)
+          }, function(err, tt) {
             expect(tt.name).to.equal('some other name');
             expect(tt._id.toString()).to.equal(myFavoriteTaskTimer._id.toString());
             done();
@@ -165,91 +175,105 @@ describe('task timer routes', function() {
   function loadData(done) {
     db.taskTimers.remove(function() {
       db.taskTimers.insert([{
-        name: 'Create Data Route',
-        jiraTaskId: 'WPM-345',
-        sbvbTaskId: 'RFP12234',
         isActive: false,
         workDate: '2015-09-13',
         seconds: 1232,
         userRid: new ObjectId(myUserId),
+        project: {
+          name: 'Create Data Route',
+          jiraTaskId: 'WPM-345',
+          sbvbTaskId: 'RFP12234'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
         }
-      },{
-        name: 'Create Data Route',
-        jiraTaskId: 'WPM-345',
-        sbvbTaskId: 'RFP12234',
+      }, {
         isActive: false,
         workDate: '2015-09-13',
         seconds: 2939,
         userRid: new ObjectId(otherUserId),
+        project: {
+          name: 'Create Data Route',
+          jiraTaskId: 'WPM-345',
+          sbvbTaskId: 'RFP12234'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Design',
           sbvbStage: 3
         }
-      },{
-        name: 'Create Data Route',
-        jiraTaskId: 'WPM-345',
-        sbvbTaskId: 'RFP12234',
+      }, {
         isActive: false,
         workDate: '2015-09-14',
         seconds: 736,
         userRid: new ObjectId(otherUserId),
+        project: {
+          name: 'Create Data Route',
+          jiraTaskId: 'WPM-345',
+          sbvbTaskId: 'RFP12234'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
         }
-      },{
-        name: 'Do Something Else',
-        jiraTaskId: 'WPM-123',
-        sbvbTaskId: 'RFP12235',
+      }, {
         isActive: false,
         workDate: '2015-09-14',
         seconds: 4359,
         userRid: new ObjectId(myUserId),
+        project: {
+          name: 'Do Something Else',
+          jiraTaskId: 'WPM-123',
+          sbvbTaskId: 'RFP12235'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f232'),
           name: 'Design',
           sbvbStage: 3
         }
-      },{
-        name: 'Create Data Route',
-        jiraTaskId: 'WPM-345',
-        sbvbTaskId: 'RFP12234',
+      }, {
         isActive: true,
         workDate: '2015-09-15',
         seconds: 2754,
         userRid: new ObjectId(myUserId),
+        project: {
+          name: 'Create Data Route',
+          jiraTaskId: 'WPM-345',
+          sbvbTaskId: 'RFP12234'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f232'),
           name: 'Design',
           sbvbStage: 3
         }
-      },{
-        name: 'Do Something Else',
-        jiraTaskId: 'WPM-123',
-        sbvbTaskId: 'RFP12235',
+      }, {
         isActive: true,
         workDate: '2015-09-14',
         seconds: 11432,
         userRid: new ObjectId(otherUserId),
+        project: {
+          name: 'Do Something Else',
+          jiraTaskId: 'WPM-123',
+          sbvbTaskId: 'RFP12235'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
         }
-      },{
-        name: 'Do Something Else',
-        jiraTaskId: 'WPM-123',
-        sbvbTaskId: 'RFP12235',
+      }, {
         isActive: false,
         workDate: '2015-09-12',
         seconds: 5534,
         userRid: new ObjectId(myUserId),
+        project: {
+          name: 'Do Something Else',
+          jiraTaskId: 'WPM-123',
+          sbvbTaskId: 'RFP12235'
+        },
         task: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
