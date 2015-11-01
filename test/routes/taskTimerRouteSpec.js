@@ -184,7 +184,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-345',
           sbvbTaskId: 'RFP12234'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
@@ -199,7 +199,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-345',
           sbvbTaskId: 'RFP12234'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Design',
           sbvbStage: 3
@@ -214,7 +214,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-345',
           sbvbTaskId: 'RFP12234'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
@@ -229,7 +229,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-123',
           sbvbTaskId: 'RFP12235'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f232'),
           name: 'Design',
           sbvbStage: 3
@@ -244,7 +244,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-345',
           sbvbTaskId: 'RFP12234'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f232'),
           name: 'Design',
           sbvbStage: 3
@@ -259,7 +259,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-123',
           sbvbTaskId: 'RFP12235'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
@@ -274,7 +274,7 @@ describe('task timer routes', function() {
           jiraTaskId: 'WPM-123',
           sbvbTaskId: 'RFP12235'
         },
-        task: {
+        stage: {
           _id: new ObjectId('561fa1b20e9397e10490f233'),
           name: 'Coding',
           sbvbStage: 4
