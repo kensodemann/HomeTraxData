@@ -15,6 +15,10 @@ describe('task timer routes', function() {
   var myUserId = '561fa1b20e9397e10490f227';
   var otherUserId = '561fa1b20e9397e10490f228';
 
+  var myFirstTimesheet = '55442235703ff40000b39fe7';
+  var myOtherTimesheet = '55456b39adb3b10000a4228a';
+  var otherPersonTimesheet = '557b9c1e58ce2e0a15208da6';
+
   var authStub = {
     requiresApiLogin: function(req, res, next) {
       req.user = testUser;
@@ -41,7 +45,15 @@ describe('task timer routes', function() {
   });
 
   beforeEach(function(done) {
-    loadData(done);
+    loadTimesheets(done);
+  });
+
+  beforeEach(function(done) {
+    loadTaskTimers(done);
+  });
+
+  beforeEach(function() {
+    require('../../src/repositories/timesheets')(app);
   });
 
   beforeEach(function() {
@@ -58,19 +70,29 @@ describe('task timer routes', function() {
   describe('GET Collection', function() {
     it('requires an API login', function(done) {
       request(app)
-        .get('/taskTimers')
+        .get('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
         });
     });
 
-    it('returns all of the task timers for the current user', function(done) {
+    it('returns all of the task timers for the specified timesheet if the timesheet is for the current user', function(done) {
       request(app)
-        .get('/taskTimers')
+        .get('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(4);
+          done();
+        });
+    });
+
+    it('returns no task timers if the speified timesheet is not for the current user', function(done) {
+      request(app)
+        .get('/timesheets/' + otherPersonTimesheet._id.toString() + '/taskTimers')
+        .end(function(err, res) {
+          expect(res.status).to.equal(403);
+          expect(res.body).to.deep.equal({});
           done();
         });
     });
@@ -79,7 +101,7 @@ describe('task timer routes', function() {
   describe('create POST', function() {
     it('requires an API login', function(done) {
       request(app)
-        .post('/taskTimers')
+        .post('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers')
         .send({
           isActive: false,
           workDate: '2015-09-13',
@@ -100,9 +122,9 @@ describe('task timer routes', function() {
         });
     });
 
-    it('saves the new taskTimer setting the userRid to the current user', function(done) {
+    it('saves the new taskTimer setting the timesheetRid to the specified timesheet', function(done) {
       request(app)
-        .post('/taskTimers')
+        .post('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers')
         .send({
           isActive: false,
           workDate: '2015-09-13',
@@ -121,14 +143,60 @@ describe('task timer routes', function() {
           expect(!!err).to.be.false;
           expect(res.status).to.equal(201);
           db.taskTimers.find({}, function(er, tts) {
-            expect(tts.length).to.equal(8);
+            expect(tts.length).to.equal(10);
             db.taskTimers.findOne({
               'project.jiraTaskId': 'WPM-348'
             }, function(err, tt) {
-              expect(tt.userRid.toString()).to.equal(myUserId);
+              expect(tt.timesheetRid.toString()).to.equal(myFirstTimesheet._id.toString());
               done();
             });
           });
+        });
+    });
+
+    it('returns status 403 if the timesheet is for a different user', function(done) {
+      request(app)
+        .post('/timesheets/' + otherPersonTimesheet._id.toString() + '/taskTimers')
+        .send({
+          isActive: false,
+          workDate: '2015-09-13',
+          seconds: 1232,
+          project: {
+            name: 'This is a new one',
+            jiraTaskId: 'WPM-348',
+            sbvbTaskId: 'RFP12234'
+          },
+          task: {
+            _id: new ObjectId('561fa1b20e9397e10490f233'),
+            name: 'Design',
+            sbvbStage: 3
+          }
+        }).end(function(err, res) {
+          expect(res.status).to.equal(403);
+          done();
+        });
+    });
+
+    it('returns status 404 if the timesheet does not exist', function(done) {
+      request(app)
+        .post('/timesheets/553108b1f564c6630cc2419e/taskTimers')
+        .send({
+          isActive: false,
+          workDate: '2015-09-13',
+          seconds: 1232,
+          project: {
+            name: 'This is a new one',
+            jiraTaskId: 'WPM-348',
+            sbvbTaskId: 'RFP12234'
+          },
+          task: {
+            _id: new ObjectId('561fa1b20e9397e10490f233'),
+            name: 'Design',
+            sbvbStage: 3
+          }
+        }).end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
         });
     });
   });
@@ -136,7 +204,7 @@ describe('task timer routes', function() {
   describe('update POST', function() {
     it('requires an API login', function(done) {
       request(app)
-        .post('/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .post('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
         .send(myFavoriteTaskTimer)
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
@@ -144,13 +212,13 @@ describe('task timer routes', function() {
         });
     });
 
-    it('returns 404 if the item is not for the current user', function(done) {
+    it('returns 403 if the specified timesheet is not for the current user', function(done) {
       notMyTaskTimer.name = 'should not edit this';
       request(app)
-        .post('/taskTimers/' + notMyTaskTimer._id.toString())
+        .post('/timesheets/' + otherPersonTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
         .send(notMyTaskTimer)
         .end(function(err, res) {
-          expect(res.status).to.equal(404);
+          expect(res.status).to.equal(403);
           done();
         });
     });
@@ -158,7 +226,7 @@ describe('task timer routes', function() {
     it('saves the changes to the existing taskTimer', function(done) {
       myFavoriteTaskTimer.name = 'some other name';
       request(app)
-        .post('/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .post('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
         .send(myFavoriteTaskTimer)
         .end(function() {
           db.taskTimers.findOne({
@@ -170,15 +238,63 @@ describe('task timer routes', function() {
           });
         });
     });
+
+    it('returns status 404 if the timesheet does not exist', function(done) {
+      request(app)
+        .post('/timesheets/553108b1f564c6630cc2419e/taskTimers' + myFavoriteTaskTimer._id.toString())
+        .send({
+          isActive: false,
+          workDate: '2015-09-13',
+          seconds: 1232,
+          project: {
+            name: 'This is a new one',
+            jiraTaskId: 'WPM-348',
+            sbvbTaskId: 'RFP12234'
+          },
+          task: {
+            _id: new ObjectId('561fa1b20e9397e10490f233'),
+            name: 'Design',
+            sbvbStage: 3
+          }
+        }).end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
   });
 
-  function loadData(done) {
+  function loadTimesheets(done) {
+    db.timesheets.remove(function() {
+      db.timesheets.insert({
+        userRid: new ObjectId(myUserId),
+        endDate: '2015-09-18'
+      }, function(err, timesheet) {
+        myFirstTimesheet = timesheet;
+        db.timesheets.insert({
+          userRid: new ObjectId(myUserId),
+          endDate: '2015-10-20'
+        }, function(err, timesheet) {
+          myOtherTimesheet = timesheet;
+          db.timesheets.insert({
+            userRid: new ObjectId(otherUserId),
+            endDate: '2015-09-18'
+          }, function(err, timesheet) {
+            otherPersonTimesheet = timesheet;
+            done();
+          });
+        });
+      });
+    });
+  }
+
+  function loadTaskTimers(done) {
     db.taskTimers.remove(function() {
       db.taskTimers.insert([{
         isActive: false,
         workDate: '2015-09-13',
         seconds: 1232,
         userRid: new ObjectId(myUserId),
+        timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
           name: 'Create Data Route',
           jiraTaskId: 'WPM-345',
@@ -194,6 +310,7 @@ describe('task timer routes', function() {
         workDate: '2015-09-13',
         seconds: 2939,
         userRid: new ObjectId(otherUserId),
+        timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
           name: 'Create Data Route',
           jiraTaskId: 'WPM-345',
@@ -209,6 +326,7 @@ describe('task timer routes', function() {
         workDate: '2015-09-14',
         seconds: 736,
         userRid: new ObjectId(otherUserId),
+        timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
           name: 'Create Data Route',
           jiraTaskId: 'WPM-345',
@@ -224,6 +342,7 @@ describe('task timer routes', function() {
         workDate: '2015-09-14',
         seconds: 4359,
         userRid: new ObjectId(myUserId),
+        timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
           name: 'Do Something Else',
           jiraTaskId: 'WPM-123',
@@ -239,6 +358,7 @@ describe('task timer routes', function() {
         workDate: '2015-09-15',
         seconds: 2754,
         userRid: new ObjectId(myUserId),
+        timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
           name: 'Create Data Route',
           jiraTaskId: 'WPM-345',
@@ -254,6 +374,7 @@ describe('task timer routes', function() {
         workDate: '2015-09-14',
         seconds: 11432,
         userRid: new ObjectId(otherUserId),
+        timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
           name: 'Do Something Else',
           jiraTaskId: 'WPM-123',
@@ -269,6 +390,39 @@ describe('task timer routes', function() {
         workDate: '2015-09-12',
         seconds: 5534,
         userRid: new ObjectId(myUserId),
+        timesheetRid: new ObjectId(myFirstTimesheet._id),
+        project: {
+          name: 'Do Something Else',
+          jiraTaskId: 'WPM-123',
+          sbvbTaskId: 'RFP12235'
+        },
+        stage: {
+          _id: new ObjectId('561fa1b20e9397e10490f233'),
+          name: 'Coding',
+          sbvbStage: 4
+        }
+      }, {
+        isActive: false,
+        workDate: '2015-10-12',
+        seconds: 5534,
+        userRid: new ObjectId(myUserId),
+        timesheetRid: new ObjectId(myOtherTimesheet._id),
+        project: {
+          name: 'Do Something Else',
+          jiraTaskId: 'WPM-123',
+          sbvbTaskId: 'RFP12235'
+        },
+        stage: {
+          _id: new ObjectId('561fa1b20e9397e10490f233'),
+          name: 'Coding',
+          sbvbStage: 4
+        }
+      }, {
+        isActive: false,
+        workDate: '2015-10-14',
+        seconds: 5534,
+        userRid: new ObjectId(myUserId),
+        timesheetRid: new ObjectId(myOtherTimesheet._id),
         project: {
           name: 'Do Something Else',
           jiraTaskId: 'WPM-123',
@@ -298,6 +452,8 @@ describe('task timer routes', function() {
   }
 
   function removeData(done) {
-    db.taskTimers.remove(done);
+    db.taskTimers.remove(function() {
+      db.timesheets.remove(done);
+    });
   }
 });

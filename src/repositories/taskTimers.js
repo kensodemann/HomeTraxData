@@ -15,35 +15,53 @@ function TaskTimers() {
 util.inherits(TaskTimers, RepositoryBase);
 
 TaskTimers.prototype.get = function(req, res) {
-  this.criteria = currentUserPredicate(req);
-  return RepositoryBase.prototype.get.call(this, req, res);
+  if (timesheetForCurrentUser(req)) {
+    this.criteria = timesheetPredicate(req);
+    return RepositoryBase.prototype.get.call(this, req, res);
+  }
+
+  res.status(403);
+  res.send();
 };
 
 TaskTimers.prototype.preSaveAction = function(req, done) {
-  req.body.userRid = new ObjectId(req.user._id);
+  req.body.timesheetRid = new ObjectId(req.timesheet._id);
   return RepositoryBase.prototype.preSaveAction.call(this, req, done);
 };
 
-TaskTimers.prototype.preCheckStatus = function(req, done) {
-  this.criteria = currentUserPredicate(req);
-  return RepositoryBase.prototype.preCheckStatus.call(this, req, done);
+// TaskTimers.prototype.preCheckStatus = function(req, done) {
+//   this.criteria = timesheetPredicate(req);
+//   return RepositoryBase.prototype.preCheckStatus.call(this, req, done);
+// };
+
+TaskTimers.prototype.save = function(req, res){
+  if (timesheetForCurrentUser(req)) {
+    return RepositoryBase.prototype.save.call(this, req, res);
+  }
+
+  res.status(403);
+  res.send();
 };
 
-function currentUserPredicate(req) {
+function timesheetForCurrentUser(req) {
+  return req.timesheet.userRid.toString() === req.user._id.toString();
+}
+
+function timesheetPredicate(req) {
   return {
-    userRid: new ObjectId(req.user._id)
+    timesheetRid: req.timesheet._id
   };
 }
 
 var repository = new TaskTimers();
 
 module.exports = function(app) {
-  app.get('/TaskTimers', redirect.toHttps, authentication.requiresApiLogin,
+  app.get('/timesheets/:timesheetRid/taskTimers', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {
       repository.get(req, res);
     });
 
-  app.post('/TaskTimers/:id?', redirect.toHttps, authentication.requiresApiLogin,
+  app.post('/timesheets/:timesheetRid/taskTimers/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {
       repository.save(req, res);
     });

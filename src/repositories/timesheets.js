@@ -52,4 +52,23 @@ module.exports = function(app) {
     function(req, res) {
       repository.save(req, res);
     });
+
+  app.param('timesheetRid', function(req, res, next, timesheetRid) {
+    var id = new ObjectId(timesheetRid);
+    db.timesheets.findOne({
+      _id: id
+    }, function(err, ts) {
+      if (err) {
+        return next(err);
+      }
+
+      if (!ts) {
+        res.status(404);
+        return res.send();
+      }
+
+      req.timesheet = ts;
+      next();
+    });
+  });
 };
