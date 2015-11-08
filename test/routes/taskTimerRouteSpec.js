@@ -241,7 +241,7 @@ describe('task timer routes', function() {
 
     it('returns status 404 if the timesheet does not exist', function(done) {
       request(app)
-        .post('/timesheets/553108b1f564c6630cc2419e/taskTimers' + myFavoriteTaskTimer._id.toString())
+        .post('/timesheets/553108b1f564c6630cc2419e/taskTimers/' + myFavoriteTaskTimer._id.toString())
         .send({
           isActive: false,
           workDate: '2015-09-13',
@@ -257,6 +257,17 @@ describe('task timer routes', function() {
             sbvbStage: 3
           }
         }).end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+
+    it('returns 404 if the task timer does not exist for this given timesheet', function(done) {
+      myFavoriteTaskTimer.name = 'some other name';
+      request(app)
+        .post('/timesheets/' + myOtherTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send(myFavoriteTaskTimer)
+        .end(function(err, res) {
           expect(res.status).to.equal(404);
           done();
         });

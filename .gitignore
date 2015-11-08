@@ -1,6 +1,7 @@
 node_modules
 
 .idea/*
+.vscode/*
 
 .c9/
 data/

@@ -29,10 +29,10 @@ TaskTimers.prototype.preSaveAction = function(req, done) {
   return RepositoryBase.prototype.preSaveAction.call(this, req, done);
 };
 
-// TaskTimers.prototype.preCheckStatus = function(req, done) {
-//   this.criteria = timesheetPredicate(req);
-//   return RepositoryBase.prototype.preCheckStatus.call(this, req, done);
-// };
+TaskTimers.prototype.preCheckStatus = function(req, done) {
+  this.criteria = timesheetPredicate(req);
+  return RepositoryBase.prototype.preCheckStatus.call(this, req, done);
+};
 
 TaskTimers.prototype.save = function(req, res){
   if (timesheetForCurrentUser(req)) {
