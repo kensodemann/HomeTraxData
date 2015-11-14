@@ -173,7 +173,7 @@ describe('task timer action routes', function() {
         db.taskTimers.save({
           isActive: true,
           workDate: '2015-08-14',
-          seconds: 4359,
+          milliseconds: 4359000,
           startTime: 73000,
           userRid: new ObjectId(myUserId)
         }, function(err, timer) {
@@ -186,7 +186,7 @@ describe('task timer action routes', function() {
         db.taskTimers.save({
           isActive: true,
           workDate: '2015-08-14',
-          seconds: 4359,
+          milliseconds: 4359000,
           startTime: 42000,
           userRid: new ObjectId(myUserId)
         }, function(err, timer) {
@@ -199,7 +199,7 @@ describe('task timer action routes', function() {
         db.taskTimers.save({
           isActive: true,
           workDate: '2015-08-14',
-          seconds: 4359,
+          milliseconds: 4359000,
           startTime: 42000,
           userRid: new ObjectId(otherUserId)
         }, function(err, timer) {
@@ -236,11 +236,11 @@ describe('task timer action routes', function() {
             db.taskTimers.findOne({
               _id: myActiveTimerId
             }, function(err, timer) {
-              expect(timer.seconds).to.equal(4600);
+              expect(timer.milliseconds).to.equal(4600000);
               db.taskTimers.findOne({
                 _id: myOtherActiveTimerId
               }, function(err, timer) {
-                expect(timer.seconds).to.equal(4631);
+                expect(timer.milliseconds).to.equal(4631000);
                 done();
               });
             });
@@ -269,7 +269,7 @@ describe('task timer action routes', function() {
         _id: myFavoriteTaskTimer._id
       }, function(err, timer) {
         timer.isActive = true;
-        timer.seconds = 1234;
+        timer.milliseconds = 1234000;
         timer.startTime = 89000;
         db.taskTimers.save(timer, function() {
           done();
@@ -359,7 +359,7 @@ describe('task timer action routes', function() {
           db.taskTimers.findOne({
             _id: myFavoriteTaskTimer._id
           }, function(err, timer) {
-            expect(timer.seconds).to.equal(1244);
+            expect(timer.milliseconds).to.equal(1244000);
             done();
           });
         });
@@ -395,7 +395,7 @@ describe('task timer action routes', function() {
       db.taskTimers.insert([{
         isActive: false,
         workDate: '2015-09-13',
-        seconds: 1232,
+        milliseconds: 1232000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -411,7 +411,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-13',
-        seconds: 2939,
+        milliseconds: 2939000,
         userRid: new ObjectId(otherUserId),
         timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
@@ -427,7 +427,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-14',
-        seconds: 736,
+        milliseconds: 736000,
         userRid: new ObjectId(otherUserId),
         timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
@@ -443,7 +443,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-14',
-        seconds: 4359,
+        milliseconds: 4359000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -459,7 +459,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-15',
-        seconds: 2754,
+        milliseconds: 2754000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -475,7 +475,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-14',
-        seconds: 11432,
+        milliseconds: 11432000,
         userRid: new ObjectId(otherUserId),
         timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
@@ -491,7 +491,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-12',
-        seconds: 5534,
+        milliseconds: 5534000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -507,7 +507,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-10-12',
-        seconds: 5534,
+        milliseconds: 5534000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myOtherTimesheet._id),
         project: {
@@ -523,7 +523,7 @@ describe('task timer action routes', function() {
       }, {
         isActive: false,
         workDate: '2015-10-14',
-        seconds: 5534,
+        milliseconds: 5534000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myOtherTimesheet._id),
         project: {
@@ -538,12 +538,12 @@ describe('task timer action routes', function() {
         }
       }], function() {
         db.taskTimers.findOne({
-          seconds: 2754,
+          milliseconds: 2754000,
           userRid: new ObjectId(myUserId)
         }, function(err, tt) {
           myFavoriteTaskTimer = tt;
           db.taskTimers.findOne({
-            seconds: 11432,
+            milliseconds: 11432000,
             userRid: new ObjectId(otherUserId)
           }, function(err, tt) {
             notMyTaskTimer = tt;

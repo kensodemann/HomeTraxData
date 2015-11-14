@@ -81,8 +81,8 @@ function setOtherTimersInactive(req, done) {
 
 function inactivate(timer) {
   var now = (new Date()).getTime();
-  var addSeconds = Math.round((now - timer.startTime) / 1000);
-  timer.seconds = (timer.seconds || 0) + addSeconds;
+  var ms = now - timer.startTime;
+  timer.milliseconds = (timer.milliseconds || 0) + ms;
   timer.isActive = false;
   timer.startTime = 0;
 }

@@ -105,7 +105,7 @@ describe('task timer routes', function() {
         .send({
           isActive: false,
           workDate: '2015-09-13',
-          seconds: 1232,
+          milliseconds: 1232000,
           project: {
             name: 'Create Data Route',
             jiraTaskId: 'WPM-345',
@@ -128,7 +128,7 @@ describe('task timer routes', function() {
         .send({
           isActive: false,
           workDate: '2015-09-13',
-          seconds: 1232,
+          milliseconds: 1232000,
           project: {
             name: 'This is a new one',
             jiraTaskId: 'WPM-348',
@@ -160,7 +160,7 @@ describe('task timer routes', function() {
         .send({
           isActive: false,
           workDate: '2015-09-13',
-          seconds: 1232,
+          milliseconds: 1232000,
           project: {
             name: 'This is a new one',
             jiraTaskId: 'WPM-348',
@@ -183,7 +183,7 @@ describe('task timer routes', function() {
         .send({
           isActive: false,
           workDate: '2015-09-13',
-          seconds: 1232,
+          milliseconds: 1232000,
           project: {
             name: 'This is a new one',
             jiraTaskId: 'WPM-348',
@@ -245,7 +245,7 @@ describe('task timer routes', function() {
         .send({
           isActive: false,
           workDate: '2015-09-13',
-          seconds: 1232,
+          milliseconds: 1232000,
           project: {
             name: 'This is a new one',
             jiraTaskId: 'WPM-348',
@@ -303,7 +303,7 @@ describe('task timer routes', function() {
       db.taskTimers.insert([{
         isActive: false,
         workDate: '2015-09-13',
-        seconds: 1232,
+        milliseconds: 1232000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -319,7 +319,7 @@ describe('task timer routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-13',
-        seconds: 2939,
+        milliseconds: 2939000,
         userRid: new ObjectId(otherUserId),
         timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
@@ -335,7 +335,7 @@ describe('task timer routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-14',
-        seconds: 736,
+        milliseconds: 736000,
         userRid: new ObjectId(otherUserId),
         timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
@@ -351,7 +351,7 @@ describe('task timer routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-14',
-        seconds: 4359,
+        milliseconds: 4359000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -367,7 +367,7 @@ describe('task timer routes', function() {
       }, {
         isActive: true,
         workDate: '2015-09-15',
-        seconds: 2754,
+        milliseconds: 2754000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -383,7 +383,7 @@ describe('task timer routes', function() {
       }, {
         isActive: true,
         workDate: '2015-09-14',
-        seconds: 11432,
+        milliseconds: 11432000,
         userRid: new ObjectId(otherUserId),
         timesheetRid: new ObjectId(otherPersonTimesheet._id),
         project: {
@@ -399,7 +399,7 @@ describe('task timer routes', function() {
       }, {
         isActive: false,
         workDate: '2015-09-12',
-        seconds: 5534,
+        milliseconds: 5534000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myFirstTimesheet._id),
         project: {
@@ -415,7 +415,7 @@ describe('task timer routes', function() {
       }, {
         isActive: false,
         workDate: '2015-10-12',
-        seconds: 5534,
+        milliseconds: 5534000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myOtherTimesheet._id),
         project: {
@@ -431,7 +431,7 @@ describe('task timer routes', function() {
       }, {
         isActive: false,
         workDate: '2015-10-14',
-        seconds: 5534,
+        milliseconds: 5534000,
         userRid: new ObjectId(myUserId),
         timesheetRid: new ObjectId(myOtherTimesheet._id),
         project: {
