@@ -56,7 +56,7 @@ function getStatus(req, timer) {
     return 404;
   }
 
-  if (timer.userRid.toString() !== req.user._id.toString()) {
+  if (req.timesheet.userRid.toString() !== req.user._id.toString()) {
     return 403;
   }
 
