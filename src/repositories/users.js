@@ -1,7 +1,6 @@
 'use strict';
 
 var authentication = require('../services/authentication');
-var colors = require('../services/colors');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
 var error = require('../services/error');
@@ -143,20 +142,13 @@ function insert(user, res) {
   user.hashedPassword = encryption.hash(user.salt, user.password);
   user.password = undefined;
 
-  db.users.count(function(err, userCount) {
+  db.users.insert(user, function(err, user) {
     if (err) {
       return error.send(err, res);
     }
 
-    user.colors = colors.getPallet(userCount);
-    db.users.insert(user, function(err, user) {
-      if (err) {
-        return error.send(err, res);
-      }
-
-      res.status(201);
-      return res.send(user);
-    });
+    res.status(201);
+    return res.send(user);
   });
 }
 
@@ -203,16 +195,26 @@ function updateUserPassword(id, passwordData, res) {
   });
 }
 
-module.exports = function(app){
-  app.get('/users', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {get(req, res);});
+module.exports = function(app) {
+  app.get('/users', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {
+    get(req, res);
+  });
 
-  app.get('/users/:id', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {getById(req, res);});
+  app.get('/users/:id', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {
+    getById(req, res);
+  });
 
-  app.post('/users', authentication.requiresRole('admin'), function(req, res) {add(req, res);});
+  app.post('/users', authentication.requiresRole('admin'), function(req, res) {
+    add(req, res);
+  });
 
-  app.put('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
-    function(req, res) {update(req, res);});
+  app.post('/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {
+      update(req, res);
+    });
 
-  app.put('/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
-    function(req, res) {changePassword(req, res);});
+  app.post('/users/:id/password', authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {
+      changePassword(req, res);
+    });
 };
