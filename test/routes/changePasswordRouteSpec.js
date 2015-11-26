@@ -8,7 +8,7 @@ var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
 var encryption = require('../../src/services/encryption');
 
-describe('changepassword Route', function() {
+describe('user password Route', function() {
   var app;
 
   beforeEach(function() {
@@ -80,7 +80,7 @@ describe('changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/changepassword/' + testUser._id)
+        .post('/users/' + testUser._id + '/password')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -94,7 +94,7 @@ describe('changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/changepassword/123456789009876543211234')
+        .post('/users/123456789009876543211234/password')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(404);
@@ -107,7 +107,7 @@ describe('changepassword Route', function() {
       passwordData.password = 'SomethingBogus';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/changepassword/' + testUser._id)
+        .post('/users/' + testUser._id + '/password')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(403);
@@ -121,7 +121,7 @@ describe('changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'Short';
       request(app)
-        .put('/changepassword/' + testUser._id)
+        .post('/users/' + testUser._id + '/password')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -135,7 +135,7 @@ describe('changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/changepassword/' + testUser._id)
+        .post('/users/' + testUser._id + '/password')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -153,7 +153,7 @@ describe('changepassword Route', function() {
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
-        .put('/changepassword/' + testUser._id)
+        .post('/users/' + testUser._id + '/password')
         .send(passwordData)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
