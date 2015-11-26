@@ -1,7 +1,15 @@
 [
   {
-    "id": "2.0.0-BETA",
-    "name": "Version 2.0.0 BETA",
+    "id": "2.0.1",
+    "name": "Lilly (2.0.1)",
+    "releaseDate": "2015-11-26",
+    "description": "Use seperate versions.",
+    "features": ["Use seperate versions"],
+    "bugFixes": []
+  },
+  {
+    "id": "2.0.0",
+    "name": "BETA (2.0.0)",
     "releaseDate": "2015-11-22",
     "description": "The first BETA release of the repurposed HomeTrax project. This release is a very sparse MVP.",
     "features": ["Project Setup", "Stages Based on SBVB Stages", "JIRA and SBVB Based IDs", "Basic Time Tracking"],
