@@ -45,6 +45,9 @@ function createStages() {
 
 function defaultStages() {
   return [{
+    stageNumber: 0,
+    name: 'Miscellaneous'
+  }, {
     stageNumber: 1,
     name: 'Requirements Definition'
   }, {
