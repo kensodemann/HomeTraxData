@@ -34,7 +34,16 @@ TaskTimers.prototype.preCheckStatus = function(req, done) {
   return RepositoryBase.prototype.preCheckStatus.call(this, req, done);
 };
 
-TaskTimers.prototype.save = function(req, res){
+TaskTimers.prototype.remove = function(req, res) {
+  if (timesheetForCurrentUser(req)) {
+    return RepositoryBase.prototype.remove.call(this, req, res);
+  }
+
+  res.status(403);
+  res.send();
+};
+
+TaskTimers.prototype.save = function(req, res) {
   if (timesheetForCurrentUser(req)) {
     return RepositoryBase.prototype.save.call(this, req, res);
   }
@@ -64,5 +73,10 @@ module.exports = function(app) {
   app.post('/timesheets/:timesheetRid/taskTimers/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {
       repository.save(req, res);
+    });
+
+  app.delete('/timesheets/:timesheetRid/taskTimers/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {
+      repository.remove(req, res);
     });
 };
