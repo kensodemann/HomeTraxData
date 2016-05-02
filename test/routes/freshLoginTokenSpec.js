@@ -6,7 +6,7 @@ var express = require('express');
 var proxyquire = require('proxyquire');
 var request = require('supertest');
 
-describe('refreshLoginToken', function() {
+describe('freshLoginToken', function() {
   var app;
   var testUser;
 
@@ -31,7 +31,7 @@ describe('refreshLoginToken', function() {
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
 
-    proxyquire('../../src/repositories/refreshLoginToken', {
+    proxyquire('../../src/repositories/freshLoginToken', {
       '../services/authentication': authStub
     })(app);
   });
@@ -43,16 +43,16 @@ describe('refreshLoginToken', function() {
 
     it('requires API login', function(done) {
       request(app)
-        .get('/refreshLoginToken')
+        .get('/freshLoginToken')
         .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
         });
     });
 
-    it('returns the result of the refresh token', function(done) {
+    it('returns the result of the fresh token', function(done) {
       request(app)
-        .get('/refreshLoginToken')
+        .get('/freshLoginToken')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body).to.deep.equal({
