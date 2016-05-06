@@ -1,5 +1,13 @@
 [
   {
+    "id": "2.0.2",
+    "name": "Oliver (2.0.2)",
+    "releaseDate": "2016-05-04",
+    "description": "Allow Deletes, Expire Tokens.",
+    "features": ["Allow the deletion of task timers", "Expire token after X hours, providing an endpoint to refresh them"],
+    "bugFixes": []
+  },
+  {
     "id": "2.0.1",
     "name": "Lilly (2.0.1)",
     "releaseDate": "2015-11-26",
