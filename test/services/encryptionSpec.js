@@ -17,10 +17,8 @@ describe('encryption', function() {
     buildMockCrypto();
 
     function buildMockBuffer() {
-      mockBuffer = sinon.stub({
-        toString: function() {
-        }
-      });
+      mockBuffer = {};
+      mockBuffer.toString = sinon.stub();
     }
 
     function buildMockHmac() {
@@ -60,7 +58,7 @@ describe('encryption', function() {
       expect(mockCrypto.randomBytes.calledWith(128)).to.be.true;
     });
 
-    it('converts to random bytes to a string', function() {
+    it('converts random bytes to a string', function() {
       encryption.createSalt();
       expect(mockBuffer.toString.calledOnce).to.be.true;
       expect(mockBuffer.toString.calledWith('base64')).to.be.true;

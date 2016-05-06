@@ -5,7 +5,7 @@ var encryption = require('./encryption');
 var jwt = require('jsonwebtoken');
 var secret = require('../config/secret');
 
-module.exports.passwordIsValid = function(user, enteredPassword) {
+exports.passwordIsValid = function(user, enteredPassword) {
   var hashedPassword = encryption.hash(user.salt, enteredPassword);
   return user.hashedPassword === hashedPassword;
 };
@@ -28,7 +28,8 @@ exports.authenticate = function(req, res, next) {
         return next(err);
       }
 
-      var token = jwt.sign(user, secret.jwtCertificate);
+      var token = generateAuthToken(user);
+
       res.send({
         success: true,
         user: user,
@@ -38,6 +39,24 @@ exports.authenticate = function(req, res, next) {
   });
 
   auth(req, res, next);
+};
+
+exports.refreshToken = function(req, res) {
+  try {
+    generateNewToken();
+  } catch (err) {
+    res.send({success: false});
+  }
+
+  function generateNewToken() {
+    var token = getAuthToken(req);
+    var user = jwt.verify(token, secret.jwtCertificate);
+    token = generateAuthToken(user);
+    res.send({
+      success: true,
+      token: token
+    });
+  }
 };
 
 exports.requiresApiLogin = function(req, res, next) {
@@ -94,6 +113,18 @@ function getAuthToken(req) {
   }
 
   return req.headers.authorization.split(' ')[1];
+}
+
+function generateAuthToken(user) {
+  if (user.iat) {
+    delete user.iat;
+  }
+
+  if (user.exp) {
+    delete user.exp;
+  }
+
+  return jwt.sign(user, secret.jwtCertificate, {expiresIn: '36h'});
 }
 
 function userIsNotInRole(req, role) {

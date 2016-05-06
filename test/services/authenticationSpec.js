@@ -12,7 +12,11 @@ describe('authentication', function() {
 
   beforeEach(function() {
     mockJWT = sinon.stub({
-      verify: function() {}
+      sign: function() {
+      },
+
+      verify: function() {
+      }
     });
     mockConfig = {
       jwtCertificate: 'IAmAFakeCertificate'
@@ -26,6 +30,76 @@ describe('authentication', function() {
     });
   });
 
+  describe('refreshing a login token', function() {
+    var req;
+    var res;
+    beforeEach(function() {
+      req = {
+        headers: {
+          authorization: 'Bearer IAmAToken'
+        }
+      };
+
+      res = sinon.stub({
+        send: function() {
+        }
+      });
+    });
+
+    it('decrypts the old token', function() {
+      mockJWT.verify.withArgs('IAmAToken', 'IAmAFakeCertificate').returns({id: 666, name: 'John Scott'});
+      authentication.refreshToken(req, res);
+      expect(mockJWT.verify.calledOnce).to.be.true;
+      expect(mockJWT.verify.calledWith('IAmAToken', 'IAmAFakeCertificate')).to.be.true;
+    });
+
+    describe('if the previous token is valid', function() {
+      beforeEach(function() {
+        mockJWT.verify.withArgs('IAmAToken', 'IAmAFakeCertificate').returns({id: 666, name: 'John Scott'});
+      });
+
+      it('generates a new token for the user', function() {
+        authentication.refreshToken(req, res);
+        expect(mockJWT.sign.calledOnce).to.be.true;
+        expect(mockJWT.sign.calledWith({id: 666, name: 'John Scott'}, 'IAmAFakeCertificate')).to.be.true;
+      });
+
+      it('strips the iat and exp if they exist', function() {
+        mockJWT.verify.withArgs('IAmAToken', 'IAmAFakeCertificate').returns({
+          id: 666,
+          name: 'John Scott',
+          iat: 1234,
+          exp: 2345
+        });
+        authentication.refreshToken(req, res);
+        expect(mockJWT.sign.calledOnce).to.be.true;
+        expect(mockJWT.sign.calledWith({id: 666, name: 'John Scott'}, 'IAmAFakeCertificate')).to.be.true;
+      });
+
+      it('sends the new token and a true status', function() {
+        mockJWT.sign.withArgs({id: 666, name: 'John Scott'}, 'IAmAFakeCertificate').returns('IAmNewToken');
+        authentication.refreshToken(req, res);
+        expect(res.send.calledOnce).to.be.true;
+        expect(res.send.calledWith({success: true, token: 'IAmNewToken'})).to.be.true;
+      });
+    });
+
+    describe('if the previous token is invalid', function() {
+      beforeEach(function() {
+        mockJWT.verify.throws('InvalidToken');
+        authentication.refreshToken(req, res);
+      });
+
+      it('does not generate a new token', function() {
+        expect(mockJWT.sign.called).to.be.false;
+      });
+
+      it('sends success false', function() {
+        expect(res.send.calledOnce).to.be.true;
+        expect(res.send.calledWith({success: false})).to.be.true;
+      });
+    });
+  });
 
   describe('passwordIsValid', function() {
     var user = {
@@ -42,7 +116,6 @@ describe('authentication', function() {
     });
   });
 
-
   describe('requiresApiLogin', function() {
     var req;
     var res;
@@ -54,11 +127,13 @@ describe('authentication', function() {
         }
       };
       res = sinon.stub({
-        status: function() {},
+        status: function() {
+        },
 
-        end: function() {}
+        end: function() {
+        }
       });
-      next = sinon.spy();
+      next = sinon.stub();
     });
 
     it('Verifies the Authentication token', function() {
@@ -124,11 +199,13 @@ describe('authentication', function() {
         }
       };
       res = sinon.stub({
-        status: function() {},
+        status: function() {
+        },
 
-        end: function() {}
+        end: function() {
+        }
       });
-      next = sinon.spy();
+      next = sinon.stub();
     });
 
     it('sets a status 401 if not authenticated', function() {
@@ -166,7 +243,8 @@ describe('authentication', function() {
     var next;
     beforeEach(function() {
       req = sinon.stub({
-        isAuthenticated: function() {},
+        isAuthenticated: function() {
+        },
 
         params: {
           id: 1
@@ -176,11 +254,13 @@ describe('authentication', function() {
         }
       });
       res = sinon.stub({
-        status: function() {},
+        status: function() {
+        },
 
-        end: function() {}
+        end: function() {
+        }
       });
-      next = sinon.spy();
+      next = sinon.stub();
     });
 
     it('Should set a status 401 if not authenticated', function() {

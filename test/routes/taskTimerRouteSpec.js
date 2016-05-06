@@ -274,6 +274,64 @@ describe('task timer routes', function() {
     });
   });
 
+  describe('DELETE', function() {
+    it('requires an API login', function(done) {
+      request(app)
+        .delete('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send()
+        .end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
+          done();
+        });
+    });
+
+    it('returns 403 if the specified timesheet is not for the current user', function(done) {
+      notMyTaskTimer.name = 'should not edit this';
+      request(app)
+        .delete('/timesheets/' + otherPersonTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send()
+        .end(function(err, res) {
+          expect(res.status).to.equal(403);
+          done();
+        });
+    });
+
+    it('returns status 404 if the timesheet does not exist', function(done) {
+      request(app)
+        .delete('/timesheets/553108b1f564c6630cc2419e/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send().end(function(err, res) {
+        expect(res.status).to.equal(404);
+        done();
+      });
+    });
+
+    it('returns 404 if the task timer does not exist for this given timesheet', function(done) {
+      myFavoriteTaskTimer.name = 'some other name';
+      request(app)
+        .delete('/timesheets/' + myOtherTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send()
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+
+    it('removes the existing taskTimer', function(done) {
+      myFavoriteTaskTimer.name = 'some other name';
+      request(app)
+        .delete('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send(myFavoriteTaskTimer)
+        .end(function() {
+          db.taskTimers.findOne({
+            _id: new ObjectId(myFavoriteTaskTimer._id)
+          }, function(err, tt) {
+            expect(tt).to.be.null;
+            done();
+          });
+        });
+    });
+  });
+
   function loadTimesheets(done) {
     db.timesheets.remove(function() {
       db.timesheets.insert({
