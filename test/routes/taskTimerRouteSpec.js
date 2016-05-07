@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../src/config/database');
+var sinon = require('sinon');
 var ObjectId = require('mongojs').ObjectId;
 
 describe('task timer routes', function() {
@@ -68,6 +69,15 @@ describe('task timer routes', function() {
   });
 
   describe('GET Collection', function() {
+    var clock;
+    beforeEach(function() {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      clock.restore();
+    });
+
     it('requires an API login', function(done) {
       request(app)
         .get('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers')
@@ -83,6 +93,16 @@ describe('task timer routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(4);
+          done();
+        });
+    });
+
+    it('includes the current time', function(done) {
+      clock.tick(1994859048);
+      request(app)
+        .get('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers')
+        .end(function(err, res) {
+          expect(res.body[2]._currentTime).to.equal(1994859048);
           done();
         });
     });
@@ -239,6 +259,21 @@ describe('task timer routes', function() {
         });
     });
 
+    it('strips the _currentTime if it exists', function(done) {
+      myFavoriteTaskTimer._currentTime = 1234;
+      request(app)
+        .post('/timesheets/' + myFirstTimesheet._id.toString() + '/taskTimers/' + myFavoriteTaskTimer._id.toString())
+        .send(myFavoriteTaskTimer)
+        .end(function() {
+          db.taskTimers.findOne({
+            _id: new ObjectId(myFavoriteTaskTimer._id)
+          }, function(err, tt) {
+            expect(tt._currentTime).to.be.undefined;
+            done();
+          });
+        });
+    });
+
     it('returns status 404 if the timesheet does not exist', function(done) {
       request(app)
         .post('/timesheets/553108b1f564c6630cc2419e/taskTimers/' + myFavoriteTaskTimer._id.toString())
@@ -300,9 +335,9 @@ describe('task timer routes', function() {
       request(app)
         .delete('/timesheets/553108b1f564c6630cc2419e/taskTimers/' + myFavoriteTaskTimer._id.toString())
         .send().end(function(err, res) {
-        expect(res.status).to.equal(404);
-        done();
-      });
+          expect(res.status).to.equal(404);
+          done();
+        });
     });
 
     it('returns 404 if the task timer does not exist for this given timesheet', function(done) {

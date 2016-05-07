@@ -24,8 +24,23 @@ TaskTimers.prototype.get = function(req, res) {
   res.send();
 };
 
+TaskTimers.prototype.postGetAction = function(items, done) {
+  var currentTime = (new Date()).getTime();
+  items.forEach(function(item) {
+    if (item.isActive) {
+      item._currentTime = currentTime;
+    }
+  });
+
+  return RepositoryBase.prototype.postGetAction.call(this, items, done);
+};
+
 TaskTimers.prototype.preSaveAction = function(req, done) {
   req.body.timesheetRid = new ObjectId(req.timesheet._id);
+  if (!!req.body._currentTime) {
+    delete req.body._currentTime;
+  }
+
   return RepositoryBase.prototype.preSaveAction.call(this, req, done);
 };
 
