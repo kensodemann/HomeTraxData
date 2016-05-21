@@ -1,5 +1,13 @@
 [
   {
+    "id": "2.0.3",
+    "name": "Zoey (2.0.3)",
+    "releaseDate": "2016-05-21",
+    "description": "Calculate time using server clock",
+    "features": ["Include current time on running task so elapsed time can be calculated via a consistent clock"],
+    "bugFixes": []
+  },
+  {
     "id": "2.0.2",
     "name": "Oliver (2.0.2)",
     "releaseDate": "2016-05-04",
