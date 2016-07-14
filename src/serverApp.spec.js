@@ -5,8 +5,8 @@ process.env.NODE_ENV = 'testing';
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var db = require('../src/config/database');
-var ServerApp = require('../src/serverApp');
+var db = require('./config/database');
+var ServerApp = require('./serverApp');
 
 var serverApp;
 describe('ServerApp', function() {

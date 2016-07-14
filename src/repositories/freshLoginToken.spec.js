@@ -31,7 +31,7 @@ describe('freshLoginToken', function() {
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
 
-    proxyquire('../../src/repositories/freshLoginToken', {
+    proxyquire('./freshLoginToken', {
       '../services/authentication': authStub
     })(app);
   });

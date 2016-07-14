@@ -5,7 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var db = require('../../src/config/database');
+var db = require('../config/database');
 
 describe('timesheets routes', function() {
   var app;
@@ -31,7 +31,7 @@ describe('timesheets routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../src/repositories/stages', {
+    proxyquire('./stages', {
       '../services/authentication': authStub
     })(app);
   });

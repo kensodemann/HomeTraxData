@@ -5,7 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var db = require('../../src/config/database');
+var db = require('../config/database');
 var sinon = require('sinon');
 var ObjectId = require('mongojs').ObjectId;
 
@@ -54,12 +54,12 @@ describe('task timer routes', function() {
   });
 
   beforeEach(function() {
-    require('../../src/repositories/timesheets')(app);
+    require('./timesheets')(app);
   });
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../src/repositories/taskTimers', {
+    proxyquire('./taskTimers', {
       '../services/authentication': authStub
     })(app);
   });

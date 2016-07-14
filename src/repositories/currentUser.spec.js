@@ -2,7 +2,7 @@
 
 var _ = require('underscore');
 var bodyParser = require('body-parser');
-var db = require('../../src/config/database');
+var db = require('../config/database');
 var expect = require('chai').expect;
 var express = require('express');
 var proxyquire = require('proxyquire');
@@ -26,7 +26,7 @@ describe('currentUser', function() {
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
 
-    proxyquire('../../src/repositories/currentUser', {
+    proxyquire('./currentUser', {
       '../services/authentication': authStub
     })(app);
   });

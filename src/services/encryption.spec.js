@@ -46,7 +46,7 @@ describe('encryption', function() {
   });
 
   beforeEach(function() {
-    encryption = proxyquire('../../src/services/encryption', {
+    encryption = proxyquire('./encryption', {
       'crypto': mockCrypto
     });
   });

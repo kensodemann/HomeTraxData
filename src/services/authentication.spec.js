@@ -3,7 +3,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
-var encryption = require('../../src/services/encryption');
+var encryption = require('./encryption');
 
 describe('authentication', function() {
   var authentication;
@@ -24,7 +24,7 @@ describe('authentication', function() {
   });
 
   beforeEach(function() {
-    authentication = proxyquire('../../src/services/authentication', {
+    authentication = proxyquire('./authentication', {
       'jsonwebtoken': mockJWT,
       '../config/secret': mockConfig
     });
