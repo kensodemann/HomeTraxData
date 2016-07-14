@@ -5,9 +5,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    // Housekeeping
-    clean: ['public/dist', './public/style/*.css*'],
-
     // Code Quality Checks
     jshint: {
       options: {
@@ -27,7 +24,7 @@ module.exports = function(grunt) {
     // Tests
     mochaTest: {
       options: {
-        reporter: 'min',
+        reporter: 'spec',
         timeout: 5000
       },
       src: ['test/**/*Spec.js']
@@ -46,13 +43,12 @@ module.exports = function(grunt) {
   });
 
   // Load the plugins
-  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-mocha-test');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'mochaTest', 'jshint', 'jscs']);
+  grunt.registerTask('default', ['mochaTest', 'jshint', 'jscs']);
   grunt.registerTask('dev', ['default', 'watch']);
 };

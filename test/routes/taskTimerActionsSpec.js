@@ -55,7 +55,7 @@ describe('task timer action routes', function() {
   });
 
   beforeEach(function() {
-    clock = sinon.useFakeTimers();
+    clock = sinon.useFakeTimers('Date');
   });
 
   beforeEach(function() {
