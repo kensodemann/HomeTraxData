@@ -71,7 +71,7 @@ describe('task timer routes', function() {
   describe('GET Collection', function() {
     var clock;
     beforeEach(function() {
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers('Date');
     });
 
     afterEach(function() {

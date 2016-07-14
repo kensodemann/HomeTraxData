@@ -17,15 +17,15 @@ var repository = new Projects();
 
 Projects.prototype.validate = function(req, done) {
   if (!req.body) {
-    done(null, new Error('The request is empty'));
+    return done(null, new Error('The request is empty'));
   }
 
   if (!req.body.name) {
-    done(null, new Error('Name is required'));
+    return done(null, new Error('Name is required'));
   }
 
   if (!req.body.status) {
-    done(null, new Error('Status is required'));
+    return done(null, new Error('Status is required'));
   }
 
   done(null, null);
