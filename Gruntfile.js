@@ -11,7 +11,15 @@ module.exports = function(grunt) {
         strict: true,
         jshintrc: true
       },
-      src: ['src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
+      uses_defaults: ['src/**/*.js', '!src/**/*.spec.js', 'Gruntfile.js'],
+      with_overrides: {
+        options: {
+          jshintrc: '.jshintrc.spec'
+        },
+        files: {
+          src: ['src/**/*.spec.js']
+        }
+      }
     },
 
     jscs: {
@@ -27,7 +35,7 @@ module.exports = function(grunt) {
         reporter: 'spec',
         timeout: 5000
       },
-      src: ['test/**/*Spec.js']
+      src: ['src/**/*.spec.js']
     },
 
     // Grunt functional

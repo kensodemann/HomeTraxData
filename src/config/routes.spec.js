@@ -27,7 +27,7 @@ describe('Basic Routes', function() {
     };
     beforeEach(function() {
       authCalled = false;
-      proxyquire('../../src/config/routes', {
+      proxyquire('./routes', {
         '../services/authentication': authStub
       })(app);
     });

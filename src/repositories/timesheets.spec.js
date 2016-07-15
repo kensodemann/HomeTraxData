@@ -5,7 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var db = require('../../src/config/database');
+var db = require('../config/database');
 var ObjectId = require('mongojs').ObjectId;
 
 describe('timesheets routes', function() {
@@ -40,7 +40,7 @@ describe('timesheets routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../src/repositories/timesheets', {
+    proxyquire('./timesheets', {
       '../services/authentication': authStub
     })(app);
   });

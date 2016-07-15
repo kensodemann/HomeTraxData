@@ -5,7 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var db = require('../../src/config/database');
+var db = require('../config/database');
 
 describe('users Routes', function() {
   var app;
@@ -68,7 +68,7 @@ describe('users Routes', function() {
       requiresApiLoginCalled = false;
       roleCalledWith = '';
       roleOrCurrentCalledWith = '';
-      proxyquire('../../src/repositories/users', {
+      proxyquire('./users', {
         '../services/authentication': authStub
       })(app);
     });

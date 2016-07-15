@@ -5,8 +5,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var db = require('../../src/config/database');
-var encryption = require('../../src/services/encryption');
+var db = require('../config/database');
+var encryption = require('../services/encryption');
 
 describe('user password Route', function() {
   var app;
@@ -33,7 +33,7 @@ describe('user password Route', function() {
         }
       };
 
-      proxyquire('../../src/repositories/users', {
+      proxyquire('./users', {
         '../services/authentication': authStub
       })(app);
 
