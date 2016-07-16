@@ -124,7 +124,7 @@ function generateAuthToken(user) {
     delete user.exp;
   }
 
-  return jwt.sign(user, secret.jwtCertificate, {expiresIn: '36h'});
+  return jwt.sign(user, secret.jwtCertificate, {expiresIn: '10d'});
 }
 
 function userIsNotInRole(req, role) {
