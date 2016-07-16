@@ -1,5 +1,13 @@
 [
   {
+    "id": "2.0.4",
+    "name": "Misty (2.0.4)",
+    "releaseDate": "2016-07-15",
+    "description": "Upgrade",
+    "features": ["Upgrade the libraries used to get the job done", "Increase Timeout to 10 Days"],
+    "bugFixes": []
+  },
+  {
     "id": "2.0.3",
     "name": "Zoey (2.0.3)",
     "releaseDate": "2016-05-21",
