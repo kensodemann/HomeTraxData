@@ -52,7 +52,7 @@
   "main": "server.js",
   "scripts": {
     "prestart": "npm install",
-    "start": "nodemon -w src -w server.js server.js",
+    "start": "node server.js",
     "preupdate-webdriver": "npm install"
   }
 }
