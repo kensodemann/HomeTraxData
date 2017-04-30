@@ -1,10 +1,10 @@
-# Home App
+# Time Trax Data
 
-In order to learn, I must code. In order to code, I need something useful to code. I wanted something more complex than a TODO list, but something that
-wasn't overly complex, that I could learn with, and that perhaps I could actually use. Thus, this. Basically, it just does whatever I think I need doing
-in my life.
+We have two time tracking systems at work. It sucks, but that's life. The time-trax application
+allows me to keep track of my time so I can enter it into the systems. It is very special
+purpose for my needs.
 
-The name sucks, but then who cares.
+It also gives me a chance to learn technologies we don't use at work, so bonus.
 
 ## Quick Start
 
@@ -16,7 +16,6 @@ tools in order to do any real work.
   - npm install grunt-cli -g
   - npm install phantomjs -g
   - npm install mocha -g
-  - npm install protractor -g (not used yet)
 
 ## Summary of grunt commands
 
@@ -27,15 +26,17 @@ Here are the most useful grunt tasks. For a list of the other ones, see the Grun
   - grunt dev - dev build, waits for changes and re-runs on change, use this during development
   - grunt karma - just run the front end tests
 
-Assuming all tests are currently passing, run "grunt dev" before starting any development work, and it will automatically test and build as you work.
+Assuming all tests are currently passing, run "grunt dev" before starting any development work,
+and it will automatically test and build as you work.
 
 ## Deployment
 
-I have this project deployed on [OpenShift](https://www.openshift.com/). Given that I am not completely stupid, I am not going to give specific instructions
-here, but to set up a deployment, do this:
+I have this project deployed on [OpenShift](https://www.openshift.com/). Given that I am
+not completely stupid, I am not going to give specific instructions here, but to set up a
+deployment, do this:
 
   - Install rhc
   - rhc setup (this should generate keys, etc)
-  - git remote add URL-TO-OPENSHIFT-REPO (get URL from OpenShift account)
+  - git remote add openShift URL-TO-OPENSHIFT-REPO (get URL from OpenShift account)
 
-After that, pushes to master will do the deployment.
+After that, pushes to master using that report will do the deployment.
