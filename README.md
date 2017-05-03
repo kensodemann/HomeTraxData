@@ -1,5 +1,7 @@
 # Time Trax Data
 
+[![Build Status][travis-badge]][travis-badge-url]
+
 We have two time tracking systems at work. It sucks, but that's life. The time-trax application
 allows me to keep track of my time so I can enter it into the systems. It is very special
 purpose for my needs.
@@ -40,3 +42,6 @@ deployment, do this:
   - git remote add openShift URL-TO-OPENSHIFT-REPO (get URL from OpenShift account)
 
 After that, pushes to master using that report will do the deployment.
+
+[travis-badge]: https://travis-ci.org/kensodemann/time-trax-data.svg?branch=master
+[travis-badge-url]: https://travis-ci.org/kensodemann/time-trax-data
