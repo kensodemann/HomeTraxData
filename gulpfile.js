@@ -46,7 +46,7 @@ gulp.task('style', function() {
 gulp.task('test', function() {
   var mocha = require('gulp-mocha');
   return gulp
-    .src(__dirname + '/**/*.spec.js')
+    .src(__dirname + '/src/**/*.spec.js')
     .pipe(mocha({ reporter: 'nyan' }));
 });
 
@@ -73,14 +73,14 @@ gulp.task('generateNextVersion', ['checkReleaseParams'], function() {
 });
 
 gulp.task('bumpVersion', ['generateNextVersion'], function() {
-  bump = require('gulp-bump');
+  var bump = require('gulp-bump');
   return gulp.src('./package.json')
     .pipe(bump({ version: nextVersion }))
     .pipe(gulp.dest('./'));
 });
 
 gulp.task('generateChangelog', ['bumpVersion'], function() {
-  var conventionalChangelog = require('gulp-conventional-changelog')
+  var conventionalChangelog = require('gulp-conventional-changelog');
   return gulp.src('CHANGELOG.md')
     .pipe(conventionalChangelog({
       preset: 'angular'
@@ -95,14 +95,16 @@ gulp.task('commitRelease', ['generateChangelog'], function() {
 });
 
 gulp.task('tagRelease', ['commitRelease'], function() {
-  git.tag(nextVersion, '', function (err) {
+  git.tag(nextVersion, '', function(err) {
     if (err) throw err;
   });
 });
 
 // End user tasks
 gulp.task('default', ['lint', 'style', 'test']);
+
 gulp.task('dev', ['default'], function() {
   return gulp.watch(__dirname + '/**/*.js', ['default']);
 });
+
 gulp.task('release', ['tagRelease']);
